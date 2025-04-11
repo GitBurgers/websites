@@ -3,7 +3,7 @@ const today = now.getDate
 console.log(now.toString + today.toString)
 
 function click1() {
-    let theme = sessionStorage.getItem("name");
+    let theme = localStorage.getItem("name");
     document.getElementById("top").innerText = theme;
 }
 
@@ -13,7 +13,7 @@ function showText() {
 
     // Show it in the output area
     document.getElementById("outputArea").textContent = "You wrote: " + userText;
-    sessionStorage.setItem("name", userText);
+    localStorage.setItem("name", userText);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,15 +23,15 @@ for (let i = 1; i <= 14; i++) {
     box.className = "day-box";
     box.textContent = i;
     box.dataset.day = i;
-      // Check sessionStorage
-    const saved = sessionStorage.getItem("day-" + i);
+      // Check localStorage
+    const saved = localStorage.getItem("day-" + i);
     if (saved === "true") {
         box.classList.add("active");
     }
       // Toggle state on click
     box.addEventListener("click", () => {
         const isActive = box.classList.toggle("active");
-        sessionStorage.setItem("day-" + i, isActive);
+        localStorage.setItem("day-" + i, isActive);
     });  
     container.appendChild(box);
 }
