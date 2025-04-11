@@ -1,0 +1,35 @@
+.headline-1 {
+    color: darkblue;
+    font-size: 36px;
+}
+
+.custom-paragraph {
+    color: seagreen;
+    font-size: 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 150px); /* 7 columns */
+    gap: 10px;
+    padding: 20px;
+}
+
+.day-box {
+    width: 150px;
+    height: 100px;
+    background-color: lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
+}
+
+.day-box.active {
+    background-color: mediumseagreen;
+    color: white;
+}
