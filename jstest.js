@@ -1,18 +1,7 @@
-const binId = "67f8d1208a456b7966871d39"; // ← Replace this
-const apiKey = "$2a$10$NKFzNwGZ2lEFGv2eFf1jzu73QKC.sFeuZgvgiofw1xzkpg4/dKyU6"; // ← Replace this
+const binId = "67f8d1208a456b7966871d39";
+const apiKey = "$2a$10$NKFzNwGZ2lEFGv2eFf1jzu73QKC.sFeuZgvgiofw1xzkpg4/dKyU6";
 const url = `https://api.jsonbin.io/v3/b/${binId}`;
-let dayStates = {}; // Store current states
-
-function click1() {
-    let theme = sessionStorage.getItem("name");
-    document.getElementById("top").innerText = theme;
-}
-
-function showText() {
-    const userText = document.getElementById("textInput").value;
-    document.getElementById("outputArea").textContent = "You wrote: " + userText;
-    sessionStorage.setItem("name", userText);
-}
+let dayStates = {}; // Stores text for each day
 
 // Load day data from JSONBin
 function loadDays() {
@@ -44,24 +33,46 @@ function saveDays() {
     .catch(err => console.error("Save error:", err));
 }
 
-// Build grid using data from JSONBin
+// Render tooltips and visual indicator
+function renderTooltip(box, text) {
+    box.title = text || "";
+    if (text && text.trim() !== "") {
+        box.classList.add("active");
+    } else {
+        box.classList.remove("active");
+    }
+}
+
+// Build grid using text-based data
 function buildCalendar() {
     const container = document.querySelector(".calendar-grid");
     container.innerHTML = "";
 
     for (let i = 1; i <= 14; i++) {
+        const dayKey = "day" + i;
         const box = document.createElement("div");
         box.className = "day-box";
-        box.textContent = i;
         box.dataset.day = i;
 
-        if (dayStates["day" + i]) {
-            box.classList.add("active");
-        }
+        const savedText = dayStates[dayKey] || "";
+        renderTooltip(box, savedText);
+
+        // Set the visible text inside the box
+        box.textContent = savedText ? `${i}: ${savedText}` : `${i}`;
 
         box.addEventListener("click", () => {
-            box.classList.toggle("active");
-            dayStates["day" + i] = box.classList.contains("active");
+            const input = document.getElementById("eventInput");
+            const text = input.value.trim();
+
+            if (text !== "") {
+                dayStates[dayKey] = text;
+            } else {
+                dayStates[dayKey] = "";
+            }
+
+            // Update box text and tooltip
+            box.textContent = text ? `${i}: ${text}` : `${i}`;
+            renderTooltip(box, text);
             saveDays();
         });
 
@@ -69,6 +80,11 @@ function buildCalendar() {
     }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
     loadDays();
 });
+
+function clearInput() {
+    document.getElementById("eventInput").value = "";
+}
