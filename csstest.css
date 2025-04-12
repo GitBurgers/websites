@@ -1,11 +1,12 @@
-.headline-1 {
-    color: darkblue;
-    font-size: 36px;
+body {
+    background-color: #000000; /* light blue */
+    color: white; /* Change default text color */
+    font-family: Arial, sans-serif
 }
 
-.custom-paragraph {
-    color: seagreen;
-    font-size: 20px;
+.headline-1 {
+    color: rgb(150, 150, 161);
+    font-size: 36px;
 }
 
 .calendar-grid {
@@ -18,7 +19,7 @@
 .day-box {
     width: 150px;
     height: 100px;
-    background-color: lightgray;
+    background-color: rgb(85, 85, 85);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,4 +33,26 @@
 .day-box.active {
     background-color: mediumseagreen;
     color: white;
+}
+
+#eventInput {
+    width: 150px;
+    padding: 5px;
+    font-size: 16px;
+    background-color: #7a7a7a;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    outline: none;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+#eventInput:focus {
+    border-color: #2196F3;
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+}
+
+.eventClear {
+    width: 75px;
+    height: 30px;
 }
