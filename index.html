@@ -2,16 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Styled Text Example</title>
+    <title>Term 2 Calendar</title>
     <link rel="stylesheet" href="csstest.css">
 </head>
 <body>
     <script src="jstest.js"></script>
     <h1 class="headline-1">Term 2 calendar</h1>
-    <input type="text" id="eventInput" placeholder="Add event..." />
-    <button class="eventClear" onclick="clearInput()">✖️ Clear</button>
-    <p>Click a tile to save event</p>
 
-    <div class="calendar-grid"></div>
+    <input type="text" id="eventInput"/>
+    <button class="eventClear" onclick="clearInput()">✖️ Clear</button>
+
+    <button class="colorChange" id="color-green">g</button>
+    <button class="colorChange" id="color-or">o</button>
+    <button class="colorChange" id="color-red">b</button>
+    <button class="colorChange" id="color-grey">g</button>
+
+    <div id="calendarScroll">
+        <div class="calendar-grid"></div>
+    </div>
+    <button id="saveEvent"onclick="saveDays()"><b>Save Changes</b></button>
+
+    <div id="dueList">
+        <h3>📚 Due Work</h3>
+    </div>
 </body>
 </html>
