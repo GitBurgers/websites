@@ -1,58 +1,216 @@
 body {
-    background-color: #000000; /* light blue */
+    background-color: #333333;
+    font-size: 24px;
     color: white; /* Change default text color */
     font-family: Arial, sans-serif
 }
-
 .headline-1 {
-    color: rgb(150, 150, 161);
+    color: rgb(172, 172, 204);
     font-size: 36px;
 }
 
+#calendarScroll {
+    width: 1060px;
+    height: 490px;  /* Adjust based on how many weeks you show at once */
+    overflow-y:auto;  /* Scroll vertically */
+    padding: 10px;
+    box-shadow: 0 0 5px #000000;
+    background-color: #333333;
+    border: 6px solid;
+    border-color: #000000;
+} 
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 150px); /* 7 columns */
+    grid-template-columns: 50px repeat(7, 128px); /* extra column for week number */
     gap: 10px;
     padding: 20px;
 }
 
-.day-box {
-    width: 150px;
-    height: 100px;
+.day-box {      /* || The main box || */
+    width: 130px;
+    height: 70px;
     background-color: rgb(85, 85, 85);
     display: flex;
+    flex-direction: column; /* Stack vertically */
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 4px;
+    text-align: center;
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.3s;
+    transition: background-color 0.5s;
 }
+[today="true"] {
+    width: 122px;
+    height: 62px;
+    color: white;
+    border: 4px solid;
+    border-color: #ffffff;
+    border-radius: 14px;
+}
+[boxColor="weekend"] {
+    background-color: rgb(131, 131, 131);
+    color: white;
+}
+[boxColor="thursday"] {
+    background-color: rgb(88, 106, 117);
+    color: white;
+}
+[boxColor="friSports"] {
+    background-color: rgb(118, 99, 124);
+    color: white;
+}
+
+
+.weekDiv {
+    width: 55px;
+    height: 50px;
+    background-color: rgb(40, 82, 76);
+    display: flex;
+    flex-direction: column; /* Stack vertically */
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 30%;
+    user-select: none;
+    transition: background-color 0.3s;
+    padding-top: 8px;
+    margin-top: 10px;
+}
+.weekDiv[weekType="a"] {
+    background-color: rgb(66, 128, 118);
+}
+
+.day-num {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.event-text {
+    font-size: clamp(8px, 2vw, 18px);
+    color: #ffffff;
+    margin-top: 0px;
+    max-width: 100%;
+    line-height: 18px;
+}
+
+.event-text-red {
+    font-size: 18px;
+    color: #ff0000;
+    margin-top: 4px;
+}
+
 
 .day-box.active {
     background-color: mediumseagreen;
     color: white;
 }
+.day-box.active[boxEventColor="red"] {
+    background-color: rgb(155, 35, 35);
+    color: white;
+}
+.day-box.active[boxEventColor="or"] {
+    background-color: rgb(187, 125, 33);
+    color: white;
+}
+.day-box.active[boxEventColor="grey"] {
+    background-color: rgb(131, 131, 131);
+    color: white;
+}
 
 #eventInput {
-    width: 150px;
+    width: 200px;
     padding: 5px;
-    font-size: 16px;
+    font-size: 20px;
     background-color: #7a7a7a;
     border: 2px solid #4CAF50;
     border-radius: 8px;
     outline: none;
     margin-bottom: 10px;
     transition: 0.3s;
-}
-
-#eventInput:focus {
+} #eventInput:focus {
     border-color: #2196F3;
     box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
 }
 
 .eventClear {
-    width: 75px;
-    height: 30px;
+    width: 80px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 15px;
+} .eventClear:active {
+    transform: scale(0.98);
+    background-color: #d8cbcb;
+}
+
+#color-green {
+    width: 60px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #4CAF50;
+    color: #4CAF50;
+    cursor: pointer;
+    font-size: 15px;
+} #color-or {
+    width: 60px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: orange;
+    color: orange;
+    cursor: pointer;
+    font-size: 15px;
+} #color-red {
+    width: 60px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgb(173, 25, 25);
+    color: rgb(173, 25, 25);
+    cursor: pointer;
+    font-size: 15px;
+} #color-grey {
+    width: 60px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgb(131, 131, 131);
+    color: rgb(131, 131, 131);
+    cursor: pointer;
+    font-size: 15px;
+}
+#color-green.toggled { background-color: #3ec743; color:#3ec743; border: 5px solid;}
+#color-or.toggled { background-color: #ffb444; color:#ffb444; border: 5px solid;}
+#color-red.toggled { background-color: #ff6458; color:#ff6458; border: 5px solid;}
+#color-grey.toggled { background-color: rgb(180, 180, 180); color:rgb(180, 180, 180); border: 5px solid;}
+
+#saveEvent {
+    margin-top: 20px;
+    background-color: #bbbbbb;
+    width: 145px;
+    height: 50px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 18px;
+}
+#saveEvent:active {
+    background-color: #8b8b96;
+    transform: scale(0.98); /* slightly shrink */
+}
+
+#dueList {
+    line-height: 12px;
+    position: absolute;
+    top: 50px;
+    left: 1150px; 
+}
+.newDue {
+    font-size: 30px;
+}
+.newDue[dueColor="or"] {
+    color: #e49f50;
+} .newDue[dueColor="red"] {
+    color: #df4242;
 }
