@@ -7,8 +7,10 @@
 </head>
 <body>
     <script src="jstest.js"></script>
-    <h1 class="headline-1">Term 2 calendar</h1>
-
+    <div id="topDiv">
+        <h1 class="headline-1">Term 2 calendar</h1>
+        <p id="quickText">Today: </p>
+    </div>
     <input type="text" id="eventInput"/>
     <button class="eventClear" onclick="clearInput()">✖️ Clear</button>
 
@@ -16,6 +18,7 @@
     <button class="colorChange" id="color-or">o</button>
     <button class="colorChange" id="color-red">b</button>
     <button class="colorChange" id="color-grey">g</button>
+    <button class="colorChange" id="color-purple">p</button>
 
     <div id="calendarScroll">
         <div class="calendar-grid"></div>
@@ -23,7 +26,9 @@
     <button id="saveEvent"onclick="saveDays()"><b>Save Changes</b></button>
 
     <div id="dueList">
-        <h3>📚 Due Work</h3>
+        <h3 id="STime">Study time:</h3>
+        <div id="STimeAdd">Generate Time</div>
+        <h2>📚 Due Work</h2>
     </div>
 </body>
 </html>
