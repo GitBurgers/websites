@@ -1,27 +1,37 @@
 body {
-    background-color: #333333;
+    /*background-color: #333333; */
+    background: radial-gradient(circle at 25% 50%, #3f3f3f 0%, #121212 200%);
     font-size: 24px;
     color: white; /* Change default text color */
     font-family: Arial, sans-serif
+}
+
+#topDiv {
+    display: flex;
 }
 .headline-1 {
     color: rgb(172, 172, 204);
     font-size: 36px;
 }
+#quickText {
+    font-size: larger;
+    margin-left: 50px;
+}
 
 #calendarScroll {
-    width: 1060px;
+    width: 1025px;
     height: 490px;  /* Adjust based on how many weeks you show at once */
-    overflow-y:auto;  /* Scroll vertically */
+    overflow-y:auto;
     padding: 10px;
     box-shadow: 0 0 5px #000000;
     background-color: #333333;
     border: 6px solid;
     border-color: #000000;
+    margin-left: -5px;
 } 
 .calendar-grid {
-    display: grid;
-    grid-template-columns: 50px repeat(7, 128px); /* extra column for week number */
+    display: grid;  
+    grid-template-columns: 25px repeat(7, 128px); /* extra column for week number */
     gap: 10px;
     padding: 20px;
 }
@@ -49,6 +59,7 @@ body {
     border: 4px solid;
     border-color: #ffffff;
     border-radius: 14px;
+    background-clip: padding-box; 
 }
 [boxColor="weekend"] {
     background-color: rgb(131, 131, 131);
@@ -59,7 +70,7 @@ body {
     color: white;
 }
 [boxColor="friSports"] {
-    background-color: rgb(118, 99, 124);
+    background-color: rgb(120, 90, 125);
     color: white;
 }
 
@@ -78,11 +89,9 @@ body {
     font-size: 40px;
     border-radius: 30%;
     user-select: none;
-    transition: background-color 0.3s;
-    padding-top: 8px;
     margin-top: 10px;
-}
-.weekDiv[weekType="a"] {
+    margin-left: -25px;
+} .weekDiv[weekType="a"] {
     background-color: rgb(66, 128, 118);
 }
 
@@ -121,6 +130,9 @@ body {
 .day-box.active[boxEventColor="grey"] {
     background-color: rgb(131, 131, 131);
     color: white;
+} .day-box.active[boxEventColor="purple"] {
+    background-color: rgb(159, 129, 170);
+    color: white;
 }
 
 #eventInput {
@@ -148,46 +160,37 @@ body {
     background-color: #d8cbcb;
 }
 
-#color-green {
+.colorChange {
     width: 60px;
     height: 40px;
     border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+}
+#color-green {
     background-color: #4CAF50;
     color: #4CAF50;
-    cursor: pointer;
-    font-size: 15px;
 } #color-or {
-    width: 60px;
-    height: 40px;
-    border-radius: 20px;
     background-color: orange;
     color: orange;
-    cursor: pointer;
-    font-size: 15px;
 } #color-red {
-    width: 60px;
-    height: 40px;
-    border-radius: 20px;
     background-color: rgb(173, 25, 25);
     color: rgb(173, 25, 25);
-    cursor: pointer;
-    font-size: 15px;
 } #color-grey {
-    width: 60px;
-    height: 40px;
-    border-radius: 20px;
     background-color: rgb(131, 131, 131);
     color: rgb(131, 131, 131);
-    cursor: pointer;
-    font-size: 15px;
+} #color-purple {
+    background-color: rgb(170, 133, 177);
+    color: rgb(170, 133, 177);
 }
 #color-green.toggled { background-color: #3ec743; color:#3ec743; border: 5px solid;}
 #color-or.toggled { background-color: #ffb444; color:#ffb444; border: 5px solid;}
 #color-red.toggled { background-color: #ff6458; color:#ff6458; border: 5px solid;}
 #color-grey.toggled { background-color: rgb(180, 180, 180); color:rgb(180, 180, 180); border: 5px solid;}
+#color-purple.toggled { background-color: rgb(194, 167, 199); color:rgb(194, 167, 199); border: 5px solid;}
 
 #saveEvent {
-    margin-top: 20px;
+    margin-top: 10px;
     background-color: #bbbbbb;
     width: 145px;
     height: 50px;
@@ -200,14 +203,29 @@ body {
     transform: scale(0.98); /* slightly shrink */
 }
 
+#STimeAdd {
+    position: relative;
+    top: 0px;
+    left: 10px;
+    background-color: #bbbbbb;
+    color: #121212;
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    padding-top: 5px;
+    text-align: center;
+}
+
 #dueList {
-    line-height: 12px;
+    line-height: 20px;
     position: absolute;
-    top: 50px;
-    left: 1150px; 
+    top: 80px;
+    left: 1075px; 
 }
 .newDue {
-    font-size: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #3ec743;
 }
 .newDue[dueColor="or"] {
     color: #e49f50;
