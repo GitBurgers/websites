@@ -1,17 +1,19 @@
-const binId = "67f8d1208a456b7966871d39";
-const apiKey = "$2a$10$NKFzNwGZ2lEFGv2eFf1jzu73QKC.sFeuZgvgiofw1xzkpg4/dKyU6";
+const binId = "6811d2ea8960c979a59032a9";
+const apiKey = "$2a$10$GU10NEpr.zl4cTGT3wAtXuxlTMrDfoRyeJ4Rsg22uYR6CngccpY6K";
 const url = `https://api.jsonbin.io/v3/b/${binId}`;
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
+let selectedColor = 1;
+document.body.style.cursor = "wait";
 /* April(4): 30
 May(5): 31
 June(6): 30
 */
 const time = new Date();
-const day = 28//time.getDate();
-const Month = 4//time.getMonth()
-const startDay = 28
-const startMonth = 4
+const day =  time.getDate();
+const Month =  time.getMonth() + 1;
+const startDay = 28;
+const startMonth = 4;
 const monthDay = `${String(Month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 const c = console.log;
 let tempWeekFind = day;
@@ -27,9 +29,22 @@ if (Month > 6) {
 const week = Math.ceil((tempWeekFind-startDay) / 7);
 console.log(`${monthDay} is today`);
 console.log(`${week} is this week`);
-////
-let selectedColor = 1;
-////
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadDays();
+    buildCalendar();
+    let colorButtons = document.querySelectorAll(".colorChange");
+    colorButtons.forEach((btn, index) => {
+    btn.addEventListener("click", () => {
+        selectedColor = index + 1;
+        colorButtons.forEach(b => b.classList.remove("toggled"));
+        btn.classList.add("toggled");
+    });
+    });
+    const green = document.getElementById("color-green");
+    green.classList.add("toggled");
+});
+
 function loadDays() {
     fetch(url, {
         headers: { 'X-Master-Key': apiKey }
@@ -37,7 +52,8 @@ function loadDays() {
     .then(res => res.json())
     .then(data => {
         dayStates = data.record.days;
-        buildCalendar();
+        buildCalendar();// BuildCalendar function is located here after data is taken
+        document.body.style.cursor = null//"default";
     })
     .catch(err => console.error("Error loading data:", err));
 }
@@ -53,7 +69,6 @@ function saveDays() {
     })
     .then(res => res.json())
     .then(data => {
-        console.log("Data saved to JSONBin:", data);
         hasUnsavedChanges = false;
     })
     .catch(err => console.error("Save error:", err));
@@ -69,7 +84,6 @@ function renderTooltip(box, text) {
     }
 }
 
-// Build the 14-day grid
 function buildCalendar() {
     const container = document.querySelector(".calendar-grid");
     container.innerHTML = "";
@@ -79,9 +93,9 @@ function buildCalendar() {
             weekDiv.textContent = Math.ceil(i / 7)
             weekDiv.className = "weekDiv";
             if (Math.ceil(i/7) % 2 == 1) {
-                weekDiv.setAttribute("weekType", "a");
-            } else {
                 weekDiv.setAttribute("weekType", "b");
+            } else {
+                weekDiv.setAttribute("weekType", "a");
             }
             container.appendChild(weekDiv);
         }
@@ -96,7 +110,7 @@ function buildCalendar() {
         if (i % 7 == 4) {
             box.setAttribute("boxColor", "thursday")
         }
-        if (i % 7 == 5 && Math.ceil(i/7) % 2 == 0) {
+        if ((i % 7 == 5 && Math.ceil(i/7) % 2 == 1) || (i % 7 == 2 && Math.ceil(i/7) % 2 == 1)) {
             box.setAttribute("boxColor", "friSports")
         }
         const savedText = dayStates[dayKey] || "";
@@ -134,6 +148,12 @@ function buildCalendar() {
             ? `<div class="day-num">${displayDay}</div><div class="event-text">${trimmed}</div>`
             : `<div class="day-num">${displayDay}</div>`;
             box.setAttribute("boxEventColor", "grey");
+        } else if (savedText.includes("/p")) {
+            let trimmed = savedText.slice(0, -2);
+            box.innerHTML = savedText
+            ? `<div class="day-num">${displayDay}</div><div class="event-text">${trimmed}</div>`
+            : `<div class="day-num">${displayDay}</div>`;
+            box.setAttribute("boxEventColor", "purple");
         } else {
             box.innerHTML = savedText
             ? `<div class="day-num">${displayDay}</div><div class="event-text">${savedText}</div>`
@@ -143,6 +163,13 @@ function buildCalendar() {
         box.setAttribute("dayNum", displayDay)
         if (monthDay == box.getAttribute("data-date")) {
             box.setAttribute("today", "true");
+            if (box.getAttribute("boxColor") == "thursday") {
+                document.getElementById("quickText").textContent = "Today: Piano"
+            } else if (box.getAttribute("boxColor") == "friSports") {
+                document.getElementById("quickText").textContent = "Today: Sport/PE"
+            } else {
+                document.getElementById("quickText").textContent = ""
+            }
         }
         box.addEventListener("click", () => {
             const input = document.getElementById("eventInput");
@@ -153,6 +180,8 @@ function buildCalendar() {
                 text = (text+"")+"/r"
             } if (selectedColor == 4 && input.value != "") {
                 text = (text+"")+"/g"
+            } if (selectedColor == 5 && input.value != "") {
+                text = (text+"")+"/p"
             } 
                 // Save or clear local data
             if (text !== "") {
@@ -160,7 +189,6 @@ function buildCalendar() {
             } else {
                 dayStates[dayKey] = "";
             }
-
             if (text.includes("/r")) {
                 let trimmed2 = text.slice(0, -2);
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
@@ -169,11 +197,14 @@ function buildCalendar() {
                 let trimmed2 = text.slice(0, -2);
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
                 box.setAttribute("boxEventColor", "or")
-            }
-            else if (text.includes("/g")){
+            } else if (text.includes("/g")){
                 let trimmed2 = text.slice(0, -2);
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
                 box.setAttribute("boxEventColor", "grey")
+            } else if (text.includes("/p")) {
+                let trimmed2 = text.slice(0, -2);
+                box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
+                box.setAttribute("boxEventColor", "purple")
             } else {
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${text}</div>`
             }
@@ -206,19 +237,6 @@ window.addEventListener("beforeunload", () => {
     }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadDays();
-    let colorButtons = document.querySelectorAll(".colorChange");
-    colorButtons.forEach((btn, index) => {
-    btn.addEventListener("click", () => {
-        selectedColor = index + 1;
-        colorButtons.forEach(b => b.classList.remove("toggled"));
-        btn.classList.add("toggled");
-});
-});
-    const green = document.getElementById("color-green");
-    green.classList.add("toggled");
-});
 function modifyEvents() {
     let getText = document.querySelectorAll(".event-text");
     getText.forEach(el => {
@@ -239,24 +257,33 @@ function clearInput() {
 }
 
 function dueWorkList() {
+    let daysList = []
     const dueContainer = document.getElementById("dueList");
-    dueContainer.innerHTML = "<h3>📚 Due Work</h3>"; // Clear and reset heading
     for (let i = 1; i <= 100; i++) {
         let tempKey = "day" + i;
         if (dayStates[tempKey] && dayStates[tempKey].trim() !== "") {
             let newDue = document.createElement("p");
             newDue.className = ("newDue")
-            newDue.textContent = `Day ${i}: ${dayStates[tempKey]}`;
-            if (!newDue.textContent.includes("/g")) {
+            newDue.textContent = `${dayDifference(i)}: ${dayStates[tempKey]}`;
+            if (!newDue.textContent.includes("/g") && !newDue.textContent.includes("/p")) {
                 if (newDue.textContent.includes("/o")) {
                     newDue.setAttribute("dueColor", "or")
-                    newDue.textContent = newDue.textContent.slice(0, -2)
+                    newDue.textContent = newDue.textContent.slice(0, -2);
                 } else if (newDue.textContent.includes("/r")) {
                     newDue.setAttribute("dueColor", "red")
-                    newDue.textContent = newDue.textContent.slice(0, -2)
+                    newDue.textContent = newDue.textContent.slice(0, -2);
+                    daysList.push(dayDifference(i));
                 }
                 dueContainer.appendChild(newDue);
-            }
+            }}}
+    let totalStudyTime = 0;
+    c(daysList);
+    for (let j=0;j<daysList.length;j++) {
+        totalStudyTime=totalStudyTime+daysList[j];
+        c(totalStudyTime)
     }
-    }
+}
+
+function dayDifference(Target) {
+    return((Target-1+startDay)-tempWeekFind)
 }
