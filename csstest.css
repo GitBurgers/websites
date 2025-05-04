@@ -189,6 +189,22 @@ body {
 #color-grey.toggled { background-color: rgb(180, 180, 180); color:rgb(180, 180, 180); border: 5px solid;}
 #color-purple.toggled { background-color: rgb(194, 167, 199); color:rgb(194, 167, 199); border: 5px solid;}
 
+#loadC {
+    font-size: 24px; 
+    padding-left: 12px;
+    padding-right: 12px;
+    background-color: #b3b3b3;
+    cursor: pointer;
+}#loadC:active {
+    transform: scale(0.98);
+}
+#saveWarning {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+    color: #ffffff;
+    font-size: 28px;
+}
+
 #saveEvent {
     margin-top: 10px;
     background-color: #bbbbbb;
@@ -206,14 +222,36 @@ body {
 #STimeAdd {
     position: relative;
     top: 0px;
-    left: 10px;
+    left: 0px;
     background-color: #bbbbbb;
     color: #121212;
     width: 200px;
     height: 40px;
     cursor: pointer;
-    padding-top: 5px;
     text-align: center;
+    padding-top: 10px;
+    padding-right: 2px;
+    font-size: 26px;
+    border-radius: 20px;
+    height: 30px;
+}#STimeAdd:active {
+    transform: scale(0.98);
+}
+#UpdateTime {
+    position: relative;
+    top: -40px;
+    left: 210px;
+    background-color: #bbbbbb;
+    color: #121212;
+    width: 120px;
+    height: 40px;
+    cursor: pointer;
+    text-align: center;
+    padding-top: 10px;
+    padding-right: 2px;
+    font-size: 26px;
+    border-radius: 20px;
+    height: 30px;
 }
 
 #dueList {
