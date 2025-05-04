@@ -19,6 +19,8 @@
     <button class="colorChange" id="color-red">b</button>
     <button class="colorChange" id="color-grey">g</button>
     <button class="colorChange" id="color-purple">p</button>
+    <button id="loadC" onclick="StartLoad()">Load</button>
+    <button id="saveWarning"><b>!!</b></button>
 
     <div id="calendarScroll">
         <div class="calendar-grid"></div>
@@ -26,8 +28,9 @@
     <button id="saveEvent"onclick="saveDays()"><b>Save Changes</b></button>
 
     <div id="dueList">
-        <h3 id="STime">Study time:</h3>
-        <div id="STimeAdd">Generate Time</div>
+        <h3 id="STime">Study Time:</h3>
+        <div id="STimeAdd" onclick="STimeC()">Generate Time</div>
+        <div id="UpdateTime" onclick="saveDays()">Update</div>
         <h2>📚 Due Work</h2>
     </div>
 </body>
