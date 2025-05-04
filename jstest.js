@@ -4,7 +4,9 @@ const url = `https://api.jsonbin.io/v3/b/${binId}`;
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
 let selectedColor = 1;
-document.body.style.cursor = "wait";
+let totalStudyTime = 0;
+let hasLoaded = 0;
+let finalSTime = NaN;
 /* April(4): 30
 May(5): 31
 June(6): 30
@@ -31,7 +33,6 @@ console.log(`${monthDay} is today`);
 console.log(`${week} is this week`);
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadDays();
     buildCalendar();
     let colorButtons = document.querySelectorAll(".colorChange");
     colorButtons.forEach((btn, index) => {
@@ -43,8 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const green = document.getElementById("color-green");
     green.classList.add("toggled");
+    updateWarning();
 });
 
+function StartLoad() {loadDays(); document.body.style.cursor = "wait";}
 function loadDays() {
     fetch(url, {
         headers: { 'X-Master-Key': apiKey }
@@ -52,13 +55,18 @@ function loadDays() {
     .then(res => res.json())
     .then(data => {
         dayStates = data.record.days;
+        hasLoaded = 1;
         buildCalendar();// BuildCalendar function is located here after data is taken
         document.body.style.cursor = null//"default";
+        finalSTime = dayStates["studyTime"];
+        c("STime = " + (dayStates["studyTime"]+""))
+        document.getElementById("STime").innerText = `Study Time: ${dayStates["studyTime"]}m`;
     })
     .catch(err => console.error("Error loading data:", err));
 }
 
 function saveDays() {
+    dayStates["studyTime"] = totalStudyTime;
     fetch(url, {
         method: "PUT",
         headers: {
@@ -227,15 +235,8 @@ function buildCalendar() {
     const scrollFrame = document.getElementById("calendarScroll");
     scrollFrame.scrollTo({ top: (week-1)*92, behavior: "smooth" });
     modifyEvents();
-    dueWorkList();
+    if (hasLoaded) dueWorkList();
 }
-
-// Optionally save on page unload
-window.addEventListener("beforeunload", () => {
-    if (hasUnsavedChanges) {
-        saveDays();
-    }
-});
 
 function modifyEvents() {
     let getText = document.querySelectorAll(".event-text");
@@ -276,14 +277,36 @@ function dueWorkList() {
                 }
                 dueContainer.appendChild(newDue);
             }}}
-    let totalStudyTime = 0;
-    c(daysList);
-    for (let j=0;j<daysList.length;j++) {
-        totalStudyTime=totalStudyTime+daysList[j];
-        c(totalStudyTime)
-    }
+    for (let j=0;j<daysList.length;j++)totalStudyTime=totalStudyTime+Math.max(0,15-daysList[j]);
+    totalStudyTime = Math.pow(totalStudyTime, 3/4) * 12;
+    (time.getDay() == 6 || time.getDay() == 0) && (totalStudyTime *= 2);
+    c("todays ST: "+(Math.round(totalStudyTime)+""));
 }
 
 function dayDifference(Target) {
-    return((Target-1+startDay)-tempWeekFind)
+    return((Target-1+startDay)-tempWeekFind);
+}
+
+function STimeC() {
+    let tempTime = dayStates["studyTime"] + Math.round(totalStudyTime);
+    const GenTime = document.getElementById("STimeAdd");
+    const isAdded = GenTime.getAttribute("added") === "true";
+    if (!isAdded) {
+        document.getElementById("STime").innerText = `Study Time: ${tempTime}m`;
+        finalSTime = tempTime;
+        GenTime.innerText = "Remove";
+        GenTime.setAttribute("added", "true");
+    } else {
+        let newTempTime = tempTime - Math.round(totalStudyTime);
+        finalSTime = tempTime;
+        document.getElementById("STime").innerText = `Study Time: ${newTempTime}m`;
+        GenTime.innerText = "Generate Time";
+        GenTime.setAttribute("added", "false");
+    }
+}
+
+async function updateWarning() {
+    if (hasUnsavedChanges) {document.getElementById("saveWarning").innerText = "!!";}
+    else {document.getElementById("saveWarning").innerText = "";}
+    setTimeout(updateWarning, 100);
 }
