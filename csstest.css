@@ -1,6 +1,6 @@
 body {
     /*background-color: #333333; */
-    background: radial-gradient(circle at 25% 50%, #3f3f3f 0%, #121212 200%);
+    background: radial-gradient(circle at 25% 50%, #414141 0%, #121212 200%);
     font-size: 24px;
     color: white; /* Change default text color */
     font-family: Arial, sans-serif
@@ -73,7 +73,24 @@ body {
     background-color: rgb(120, 90, 125);
     color: white;
 }
-
+.day-box.active[boxEventColor="red"] {
+    background-color: rgb(155, 35, 35);
+    color: white;
+}
+.day-box.active[boxEventColor="or"] {
+    background-color: rgb(187, 125, 33);
+    color: white;
+}
+.day-box.active[boxEventColor="grey"] {
+    background-color: rgb(131, 131, 131);
+    color: white;
+} .day-box.active[boxEventColor="purple"] {
+    background-color: rgb(159, 129, 170);
+    color: white;
+} .day-box.active[boxEventColor="green"] {
+    background-color: mediumseagreen;
+    color: white;
+}
 
 .weekDiv {
     width: 55px;
@@ -112,27 +129,6 @@ body {
     font-size: 18px;
     color: #ff0000;
     margin-top: 4px;
-}
-
-
-.day-box.active {
-    background-color: mediumseagreen;
-    color: white;
-}
-.day-box.active[boxEventColor="red"] {
-    background-color: rgb(155, 35, 35);
-    color: white;
-}
-.day-box.active[boxEventColor="or"] {
-    background-color: rgb(187, 125, 33);
-    color: white;
-}
-.day-box.active[boxEventColor="grey"] {
-    background-color: rgb(131, 131, 131);
-    color: white;
-} .day-box.active[boxEventColor="purple"] {
-    background-color: rgb(159, 129, 170);
-    color: white;
 }
 
 #eventInput {
@@ -182,18 +178,22 @@ body {
 } #color-purple {
     background-color: rgb(170, 133, 177);
     color: rgb(170, 133, 177);
+} #color-clear {
+    background-color: rgb(65, 65, 65);
+        color: rgb(65, 65, 65);
 }
 #color-green.toggled { background-color: #3ec743; color:#3ec743; border: 5px solid;}
 #color-or.toggled { background-color: #ffb444; color:#ffb444; border: 5px solid;}
 #color-red.toggled { background-color: #ff6458; color:#ff6458; border: 5px solid;}
 #color-grey.toggled { background-color: rgb(180, 180, 180); color:rgb(180, 180, 180); border: 5px solid;}
 #color-purple.toggled { background-color: rgb(194, 167, 199); color:rgb(194, 167, 199); border: 5px solid;}
+#color-clear.toggled { background-color: rgb(100, 100, 100); color:rgb(100, 100, 100); border: 5px solid;}
 
 #loadC {
     font-size: 24px; 
     padding-left: 12px;
     padding-right: 12px;
-    background-color: #b3b3b3;
+    background-color: #dddddd;/*#b3b3b3;*/
     cursor: pointer;
 }#loadC:active {
     transform: scale(0.98);
@@ -206,13 +206,11 @@ body {
 }
 
 #saveEvent {
-    margin-top: 10px;
-    background-color: #bbbbbb;
-    width: 145px;
-    height: 50px;
-    border-radius: 16px;
+    background-color: #b3b3b3;
+    width: 180px;
+    height: 35px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 24px;
 }
 #saveEvent:active {
     background-color: #8b8b96;
@@ -229,36 +227,18 @@ body {
     height: 40px;
     cursor: pointer;
     text-align: center;
-    padding-top: 10px;
     padding-right: 2px;
     font-size: 26px;
     border-radius: 20px;
-    height: 30px;
 }#STimeAdd:active {
     transform: scale(0.98);
-}
-#UpdateTime {
-    position: relative;
-    top: -40px;
-    left: 210px;
-    background-color: #bbbbbb;
-    color: #121212;
-    width: 120px;
-    height: 40px;
-    cursor: pointer;
-    text-align: center;
-    padding-top: 10px;
-    padding-right: 2px;
-    font-size: 26px;
-    border-radius: 20px;
-    height: 30px;
 }
 
 #dueList {
     line-height: 20px;
     position: absolute;
     top: 80px;
-    left: 1075px; 
+    left: 1075px;
 }
 .newDue {
     font-size: 28px;
@@ -269,4 +249,32 @@ body {
     color: #e49f50;
 } .newDue[dueColor="red"] {
     color: #e55050;
+}
+
+#TimeB {
+    background-color: #bb1e1e;
+    border-color: #852a2a;
+    border-radius: 20px;
+    width: 60px;
+    height: 42px;
+    font-size: 30px;
+    color: #00000000;
+    cursor: pointer;
+} #TimeB:active {
+    transform: scale(0.98);
+} #TimeD {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: -31px;
+    left: 7px;
+    background-color: #00000000;
+    border: 5px solid;
+    border-color: #880f0f;
+    border-radius: 100px;
+    cursor: pointer;
+    transform: scale(0.98);
+}
+#Timer {
+    line-height: 0%;
 }
