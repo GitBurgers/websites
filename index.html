@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Term 2 Calendar</title>
+    <title id="Title">Term 2 Calendar</title>
     <link rel="stylesheet" href="csstest.css">
 </head>
 <body>
@@ -13,24 +13,28 @@
     </div>
     <input type="text" id="eventInput"/>
     <button class="eventClear" onclick="clearInput()">✖️ Clear</button>
-
+    
     <button class="colorChange" id="color-green">g</button>
     <button class="colorChange" id="color-or">o</button>
     <button class="colorChange" id="color-red">b</button>
     <button class="colorChange" id="color-grey">g</button>
     <button class="colorChange" id="color-purple">p</button>
+    <button class="colorChange" id="color-clear">c</button>
     <button id="loadC" onclick="StartLoad()">Load</button>
     <button id="saveWarning"><b>!!</b></button>
+    <button id="saveEvent"onclick="saveDays()">Save Changes</button>
 
     <div id="calendarScroll">
         <div class="calendar-grid"></div>
     </div>
-    <button id="saveEvent"onclick="saveDays()"><b>Save Changes</b></button>
 
     <div id="dueList">
         <h3 id="STime">Study Time:</h3>
-        <div id="STimeAdd" onclick="STimeC()">Generate Time</div>
-        <div id="UpdateTime" onclick="saveDays()">Update</div>
+        <button id="STimeAdd" onclick="STimeC()">Generate Time</button>
+        <button id="TimeB" onclick="Studying()">o
+            <div id="TimeD"></div>
+        </button>
+        <h2 id="Timer"></h2>
         <h2>📚 Due Work</h2>
     </div>
 </body>
