@@ -7,6 +7,7 @@ let selectedColor = 1;
 let totalStudyTime = 0;
 let hasLoaded = 0;
 let finalSTime = NaN;
+let TimerText = NaN;
 /* April(4): 30
 May(5): 31
 June(6): 30
@@ -32,6 +33,7 @@ const week = Math.ceil((tempWeekFind-startDay) / 7);
 console.log(`${monthDay} is today`);
 console.log(`${week} is this week`);
 
+////LOADED////
 document.addEventListener("DOMContentLoaded", () => {
     buildCalendar();
     let colorButtons = document.querySelectorAll(".colorChange");
@@ -45,10 +47,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const green = document.getElementById("color-green");
     green.classList.add("toggled");
     updateWarning();
+    TimerText = document.getElementById("Timer")
+    TimerText.setAttribute("seconds", 0);
+    TimerText.setAttribute("minutes", 0);
+    TimerText.setAttribute("clicked", "0");
+});
+
+////UPDATE////
+async function updateWarning() {
+    if (hasUnsavedChanges) {
+        document.getElementById("saveWarning").innerText = "!!";
+        document.getElementById("saveEvent").style.backgroundColor = "#dddddd";
+    }
+    else {
+        document.getElementById("saveWarning").innerText = "";
+        document.getElementById("saveEvent").style.backgroundColor = "#b3b3b3";
+    }
+    requestAnimationFrame(updateWarning);
+}
+
+////KEY PRESSED////
+document.addEventListener('keydown', function(event) {
+    //console.log(`Key pressed: ${event.key}`);
+    if (event.key == " " && !hasLoaded) {document.body.style.cursor = "wait";loadDays()}
 });
 
 function StartLoad() {loadDays(); document.body.style.cursor = "wait";}
 function loadDays() {
+    dayStates["studyTime"] = Math.round(dayStates["studyTime"]);
     fetch(url, {
         headers: { 'X-Master-Key': apiKey }
     })
@@ -59,14 +85,16 @@ function loadDays() {
         buildCalendar();// BuildCalendar function is located here after data is taken
         document.body.style.cursor = null//"default";
         finalSTime = dayStates["studyTime"];
-        c("STime = " + (dayStates["studyTime"]+""))
-        document.getElementById("STime").innerText = `Study Time: ${dayStates["studyTime"]}m`;
+        //c("STime = " + (dayStates["studyTime"]+""))
+        document.getElementById("loadC").style.backgroundColor = "#b3b3b3";
+        UpdateSTime(0);
     })
     .catch(err => console.error("Error loading data:", err));
 }
 
 function saveDays() {
-    dayStates["studyTime"] = totalStudyTime;
+    dayStates["studyTime"] = Math.round(finalSTime);
+    document.body.style.cursor = "wait";
     fetch(url, {
         method: "PUT",
         headers: {
@@ -78,6 +106,7 @@ function saveDays() {
     .then(res => res.json())
     .then(data => {
         hasUnsavedChanges = false;
+        document.body.style.cursor = "default";
     })
     .catch(err => console.error("Save error:", err));
 }
@@ -162,10 +191,17 @@ function buildCalendar() {
             ? `<div class="day-num">${displayDay}</div><div class="event-text">${trimmed}</div>`
             : `<div class="day-num">${displayDay}</div>`;
             box.setAttribute("boxEventColor", "purple");
+        } else if (savedText.includes("/c")){
+            let trimmed = savedText.slice(0, -2);
+            box.innerHTML = savedText
+            ? `<div class="day-num">${displayDay}</div><div class="event-text">${trimmed}</div>`
+            : `<div class="day-num">${displayDay}</div>`;
+            box.setAttribute("boxEventColor", "clear");
         } else {
             box.innerHTML = savedText
             ? `<div class="day-num">${displayDay}</div><div class="event-text">${savedText}</div>`
-            : `<div class="day-num">${displayDay}</div>`;      
+            : `<div class="day-num">${displayDay}</div>`;
+            box.setAttribute("boxEventColor", "green");    
         }
         box.setAttribute("data-date", `${String(tempMonth).padStart(2, '0')}-${String(displayDay).padStart(2, '0')}`);
         box.setAttribute("dayNum", displayDay)
@@ -190,7 +226,9 @@ function buildCalendar() {
                 text = (text+"")+"/g"
             } if (selectedColor == 5 && input.value != "") {
                 text = (text+"")+"/p"
-            } 
+            } if (selectedColor == 6 && input.value != "") {
+                text = (text+"")+"/c"
+            }
                 // Save or clear local data
             if (text !== "") {
                 dayStates[dayKey] = text;
@@ -209,12 +247,17 @@ function buildCalendar() {
                 let trimmed2 = text.slice(0, -2);
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
                 box.setAttribute("boxEventColor", "grey")
-            } else if (text.includes("/p")) {
+            } else if (text.includes("/p")){
                 let trimmed2 = text.slice(0, -2);
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
                 box.setAttribute("boxEventColor", "purple")
+            } else if (text.includes("/c")){
+                let trimmed2 = text.slice(0, -2);
+                box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
+                box.setAttribute("boxEventColor", "clear")
             } else {
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${text}</div>`
+                box.setAttribute("boxEventColor", "green")
             }
             renderTooltip(box, text);
             input.value = "";
@@ -233,7 +276,7 @@ function buildCalendar() {
         });
     }
     const scrollFrame = document.getElementById("calendarScroll");
-    scrollFrame.scrollTo({ top: (week-1)*92, behavior: "smooth" });
+    scrollFrame.scrollTo({ top: ((week-1)*90)-110, behavior: "smooth" }); /////////////////////////////////////////////////////////////////////
     modifyEvents();
     if (hasLoaded) dueWorkList();
 }
@@ -259,6 +302,8 @@ function clearInput() {
 
 function dueWorkList() {
     let daysList = []
+    let taskList = []
+    let urgentTaskList = []
     const dueContainer = document.getElementById("dueList");
     for (let i = 1; i <= 100; i++) {
         let tempKey = "day" + i;
@@ -266,7 +311,7 @@ function dueWorkList() {
             let newDue = document.createElement("p");
             newDue.className = ("newDue")
             newDue.textContent = `${dayDifference(i)}: ${dayStates[tempKey]}`;
-            if (!newDue.textContent.includes("/g") && !newDue.textContent.includes("/p")) {
+            if (!newDue.textContent.includes("/g") && !newDue.textContent.includes("/p") && !newDue.textContent.includes("/c")) {
                 if (newDue.textContent.includes("/o")) {
                     newDue.setAttribute("dueColor", "or")
                     newDue.textContent = newDue.textContent.slice(0, -2);
@@ -274,12 +319,24 @@ function dueWorkList() {
                     newDue.setAttribute("dueColor", "red")
                     newDue.textContent = newDue.textContent.slice(0, -2);
                     daysList.push(dayDifference(i));
+                } else {
+                    if (dayDifference(i) < 3) {
+                        newDue.textContent = ("!!"+newDue.textContent);
+                        taskList.push(dayDifference(i));
+                    } else if (dayDifference(i) < 5) {
+                        newDue.textContent = ("!"+newDue.textContent);
+                        urgentTaskList.push(dayDifference(i));
+                    }
                 }
                 dueContainer.appendChild(newDue);
             }}}
-    for (let j=0;j<daysList.length;j++)totalStudyTime=totalStudyTime+Math.max(0,15-daysList[j]);
+    for (let j=0;j<daysList.length;j++) {totalStudyTime = totalStudyTime+Math.max(0,15-daysList[j]);}
     totalStudyTime = Math.pow(totalStudyTime, 3/4) * 12;
-    (time.getDay() == 6 || time.getDay() == 0) && (totalStudyTime *= 2);
+    (time.getDay() == 6 || time.getDay() == 0) && (totalStudyTime *= 1.5);
+    totalStudyTime -= taskList.length*10;
+    totalStudyTime -= urgentTaskList.length*15;
+    totalStudyTime = Math.round(totalStudyTime);
+    //totalStudyTime = Math.min(totalStudyTime, 0)
     c("todays ST: "+(Math.round(totalStudyTime)+""));
 }
 
@@ -298,15 +355,63 @@ function STimeC() {
         GenTime.setAttribute("added", "true");
     } else {
         let newTempTime = tempTime - Math.round(totalStudyTime);
-        finalSTime = tempTime;
+        finalSTime = newTempTime;
         document.getElementById("STime").innerText = `Study Time: ${newTempTime}m`;
         GenTime.innerText = "Generate Time";
         GenTime.setAttribute("added", "false");
     }
 }
 
-async function updateWarning() {
-    if (hasUnsavedChanges) {document.getElementById("saveWarning").innerText = "!!";}
-    else {document.getElementById("saveWarning").innerText = "";}
-    setTimeout(updateWarning, 100);
+function Studying() {
+    if (hasLoaded) {
+        if (TimerText.getAttribute("clicked") == "0") {
+            TimerText.setAttribute("clicked", "1");
+            let newTText = (TimerText.getAttribute("seconds").toString().padStart(2, '0') + ":" + TimerText.getAttribute("minutes").toString().padStart(2, '0'));
+            TimerText.innerText = (newTText + " / " + dayStates["studyTime"].toString() + ":00");
+
+            expected = Date.now() + 1000;
+            TimeCounter();
+        } else {
+            TimerText.setAttribute("clicked", "0");
+            TimerText.innerText = "";
+        }
+    }
+}
+
+let expected = 0;
+let count = 0;
+function TimeCounter() {
+    const now = Date.now();
+    const drift = now - expected;
+    if (drift > 1000) {console.warn('Timer is behind by', drift, 'ms');}
+
+    let mins = TimerText.getAttribute("minutes");
+    let secs = TimerText.getAttribute("seconds");
+    if (TimerText.getAttribute("clicked") == "0") {
+        dayStates["studyTime"] -= (secs > 29 ? Number(mins) + 1 : Number(mins));
+        TimerText.setAttribute("seconds", 0);
+        TimerText.setAttribute("minutes", 0);
+        UpdateSTime(1);
+        return;
+    }
+    secs++;
+    if (secs > 59) {
+        secs = 0;
+        mins++;
+    }
+    TimerText.setAttribute("seconds", secs);
+    TimerText.setAttribute("minutes", mins);
+    TimerText.innerText = (mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0') + " / " + dayStates["studyTime"].toString() + ":00")
+    document.getElementById("Title").textContent = 
+    ("Term 2 Calendar "+mins.toString().padStart(2, '0')+":"+secs.toString().padStart(2, '0') + "/" + dayStates["studyTime"].toString())
+
+    expected += 1000;
+    count++;
+    if (count < 3) {setTimeout(TimeCounter, 1000);c("be")}
+    else {setTimeout(TimeCounter, Math.max(0, 1 - drift));}
+}
+
+function UpdateSTime(save) {
+    document.getElementById("STime").innerText = `Study Time: ${Math.round(dayStates["studyTime"])}m`;
+    if (save) {hasUnsavedChanges=1}
 }
