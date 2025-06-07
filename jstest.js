@@ -103,7 +103,7 @@ function Loop() {
 
 ////KEY PRESSED////
 document.addEventListener('keydown', function(event) {
-    if (event.key == " " && !hasLoaded) {document.getElementById("loadC").style.cursor = "wait";document.body.style.cursor = "wait";loadDays()}
+    if (event.key == " " && !hasLoaded) {document.getElementById("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     if (event.key == "?") {c(dayStates["studyTime"].toString() + ";" + totalStudyTime.toString() + ";" + PrevSTime.toString())}
     if (event.key == "|") {document.getElementById("STimeAdd").style.backgroundColor = '#bbbbbb'}
 });
@@ -130,7 +130,8 @@ function loadDays() {
 }*/
 
 //NEW LOAD//
-function loadDays() {
+window.newLoadDays = newLoadDays;
+function newLoadDays() {
     document.getElementById("loadC").style.cursor = "wait";
     document.body.style.cursor = "wait";
 
@@ -177,7 +178,8 @@ function saveDays() {
 }*/
 
 //NEW SAVE//
-function saveDays() {
+window.storeDays = storeDays;
+function storeDays() {
     document.body.style.cursor = "wait";
     document.getElementById("saveEvent").style.cursor = "wait";
 
@@ -385,6 +387,7 @@ function modifyEvents() {
     });
 }
 
+window.clearInput = clearInput;
 function clearInput() {
     document.getElementById("eventInput").value = "";
 }
@@ -442,6 +445,7 @@ function dayDifference(Target) {
     return((Target-1+startDay)-tempWeekFind);
 }
 
+window.STimeC = STimeC;
 function STimeC() {
     //let tempTime = dayStates["studyTime"] + Math.round(totalStudyTime);
     const GenTime = document.getElementById("STimeAdd");
@@ -462,6 +466,7 @@ function STimeC() {
     }
 }
 
+window.Studying = Studying;
 function Studying() {
     if (hasLoaded) {
         if (TimerText.getAttribute("clicked") == "0") {
