@@ -3,13 +3,14 @@ import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/fireb
 
 // 🔑 Your Firebase config
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "your-project.firebaseapp.com",
-    databaseURL: "https://your-project.firebaseio.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "your-sender-id",
-    appId: "your-app-id"
+    apiKey: "AIzaSyBVOC6RVvQw2V7YSN8MF24kM0p9N1tcfTo",
+    authDomain: "calendar-5487e.firebaseapp.com",
+    databaseURL: "https://calendar-5487e-default-rtdb.firebaseio.com",
+    projectId: "calendar-5487e",
+    storageBucket: "calendar-5487e.firebasestorage.app",
+    messagingSenderId: "705086479682",
+    appId: "1:705086479682:web:5511ad5b3e00921947bcdb",
+    measurementId: "G-CGMRRC6B0B"
 };
 
 // 🔗 Initialize Firebase and get database
