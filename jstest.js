@@ -1,3 +1,23 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// 🔑 Your Firebase config
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "your-project.firebaseapp.com",
+    databaseURL: "https://your-project.firebaseio.com",
+    projectId: "your-project-id",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "your-sender-id",
+    appId: "your-app-id"
+};
+
+// 🔗 Initialize Firebase and get database
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+
+
 const c = console.log;
 const binId = "6811d2ea8960c979a59032a9";
 const apiKey = "$2a$10$GU10NEpr.zl4cTGT3wAtXuxlTMrDfoRyeJ4Rsg22uYR6CngccpY6K";
@@ -77,7 +97,7 @@ function Loop() {
         STelement.innerHTML =`Overtime: <span id="colored">${0-dayStates["studyTime"]}m</span>`
         document.getElementById("colored").style.color = "#00ee00";
     } else {STelement.style.color = "#ffffff"}
-    setTimeout(Loop, 50)
+    setTimeout(Loop, 200)
 }
 
 ////KEY PRESSED////
@@ -87,7 +107,7 @@ document.addEventListener('keydown', function(event) {
     if (event.key == "|") {document.getElementById("STimeAdd").style.backgroundColor = '#bbbbbb'}
 });
 
-////DATA LOADED////
+/*///DATA LOADED///
 function StartLoad() {document.getElementById("loadC").style.cursor = "wait";document.body.style.cursor = "wait";loadDays();}
 function loadDays() {
     dayStates["studyTime"] = Math.round(dayStates["studyTime"]);
@@ -106,9 +126,35 @@ function loadDays() {
         document.getElementById("STimeAdd").style.backgroundColor = '#bbbbbb';
     })
     .catch(err => console.error("Error loading data:", err));
+}*/
+
+//NEW LOAD//
+function loadDays() {
+    document.getElementById("loadC").style.cursor = "wait";
+    document.body.style.cursor = "wait";
+
+    const dbRef = ref(db);
+    get(child(dbRef, "days")).then((snapshot) => {
+        if (snapshot.exists()) {
+            dayStates = snapshot.val();
+            dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
+            hasLoaded = 1;
+            buildCalendar();
+            PrevSTime = dayStates["studyTime"];
+            document.getElementById("loadC").style.backgroundColor = "#b3b3b3";
+            document.getElementById("loadC").style.cursor = "default";
+            document.getElementById("STimeAdd").style.backgroundColor = '#bbbbbb';
+            document.body.style.cursor = "default";
+        } else {
+            console.error("No data available");
+        }
+    }).catch((error) => {
+        console.error("Error loading data:", error);
+    });
 }
 
-////DATA SAVED///
+
+/*///DATA SAVED///
 function saveDays() {
     document.body.style.cursor = "wait";
     document.getElementById("saveEvent").style.cursor = "wait";
@@ -127,7 +173,24 @@ function saveDays() {
         document.getElementById("saveEvent").style.cursor = "default";
     })
     .catch(err => console.error("Save error:", err));
+}*/
+
+//NEW SAVE//
+function saveDays() {
+    document.body.style.cursor = "wait";
+    document.getElementById("saveEvent").style.cursor = "wait";
+
+    set(ref(db, "days"), dayStates)
+    .then(() => {
+        hasUnsavedChanges = false;
+        document.body.style.cursor = "default";
+        document.getElementById("saveEvent").style.cursor = "default";
+    })
+    .catch((error) => {
+        console.error("Save error:", error);
+    });
 }
+
 
 // Show saved event in tooltip and visual style
 function renderTooltip(box, text) {
@@ -301,7 +364,7 @@ function buildCalendar() {
         });
     }
     const scrollFrame = document.getElementById("calendarScroll");
-    scrollFrame.scrollTo({ top: ((week-1)*90)-110, behavior: "smooth" });
+    scrollFrame.scrollTo({ top: ((week-1)*86)-65, behavior: "smooth" });
     modifyEvents();
     if (hasLoaded) dueWorkList();
 }
@@ -405,6 +468,7 @@ function Studying() {
             let findInputType = typeof Number(findInput);
             if (findInput != "" && findInputType == "number") {dayStates["studyTime"] = findInput;clearInput()} else {
                 TimerText.setAttribute("clicked", "1");
+                PrevSTime = dayStates["studyTime"];
                 time = new Date();
                 TimerDetectSec = time.getSeconds();
                 TimerText.innerText = (TimerText.getAttribute("minutes").toString().padStart(2, '0') + ":" + TimerText.getAttribute("seconds").toString().padStart(2, '0'))
@@ -432,9 +496,9 @@ function TimeCounter() {
     }
     TimerText.setAttribute("seconds", secs);
     TimerText.setAttribute("minutes", mins);
-    TimerText.innerText = (mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0'))
+    TimerText.innerText = (mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0'));
     document.getElementById("Title").textContent = 
-    (Math.round(dayStates["studyTime"]).toString() + ":" + (59 - secs).toString().padStart(2,"0") + " / " + PrevSTime.toString())
+    (Math.round(dayStates["studyTime"]).toString() + ":" + (59 - secs).toString().padStart(2,"0") + " / " + PrevSTime.toString());
 }
 
 function UpdateSTime(save) {
