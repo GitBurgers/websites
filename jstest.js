@@ -130,7 +130,8 @@ function loadDays() {
 }*/
 
 //NEW LOAD//
-window.newLoadDays = newLoadDays;
+window.StartLoad = StartLoad;
+function StartLoad() {document.getElementById("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
 function newLoadDays() {
     document.getElementById("loadC").style.cursor = "wait";
     document.body.style.cursor = "wait";
@@ -505,9 +506,4 @@ function TimeCounter() {
     TimerText.innerText = (mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0'));
     document.getElementById("Title").textContent = 
     (Math.round(dayStates["studyTime"]).toString() + ":" + (59 - secs).toString().padStart(2,"0") + " / " + PrevSTime.toString());
-}
-
-function UpdateSTime(save) {
-    document.getElementById("STime").innerText = `Study Time: ${Math.round(dayStates["studyTime"])}m`;
-    if (save) {hasUnsavedChanges=1}
 }
