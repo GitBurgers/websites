@@ -20,7 +20,7 @@ body {
 
 #calendarScroll {
     width: 1025px;
-    height: 400px;  /* Adjust based on how many weeks you show at once */
+    height: 490px;  /* Adjust based on how many weeks you show at once */
     overflow-y:auto;
     padding: 10px;
     box-shadow: 0 0 5px #000000;
