@@ -9,11 +9,71 @@ body {
 #topDiv {
     display: flex;
 }
-.headline-1 {
+#headline-1 {
     color: rgb(172, 172, 204);
-    font-size: 36px;
+    font-size: 40px;
+    position: relative;
+    margin-top: 20px;
+    width: 333px;
+    height: 60px;
+    background-color: #64646400;
+    border: 4px #202020 solid;
+    margin-top: 7px;
+    margin-left: -4px;
+    padding-top: 9px;
+    text-align: center;
 }
+.TopBar {
+    position: absolute;
+    top: 0px;
+    margin-top: 8px;
+}
+.TopBarEl {
+    width: 333px;
+    height: 60px;
+    background-color: #505050;
+    border: 4px #202020 solid;
+    font-size: 40px;
+    margin-top: 7px;
+    margin-left: -4px;
+    padding-top: 9px;
+    padding-left: 0px;
+    position: absolute;
+    cursor: pointer;
+    text-decoration: none;
+} #TopBar1:hover {
+    background-color: #666666;
+} #TopBar1:active {
+    background-color: #808080;
+}
+#TopBar2 {
+    margin-top: 80px;
+} #TopBar2:hover {
+    background-color: #666666;
+} #TopBar2:active {
+    background-color: #808080;
+} #TopBar3 {
+    margin-top: 150px;
+} #TopBar3:hover {
+    background-color: #666666;
+} #TopBar3:active {
+    background-color: #808080;
+}
+.TopA {
+    text-decoration: none;
+    color: rgb(205, 205, 236);
+}
+
+_____________________________
+****vvvvvvvvvvvvvvvvvvvvv****
+****---------------------****
+****/*/*/ CALENDAR /*/*/****
+****---------------------****
+****vvvvvvvvvvvvvvvvvvvvv****
+
 #quickText {
+    font-size: larger;
+}#quickText {
     font-size: larger;
     margin-left: 50px;
 }
@@ -277,4 +337,83 @@ body {
 }
 #Timer {
     line-height: 0%;
+}
+
+___________________________
+|\|~*******************~|\|
+|\|~**   ~   *   ~   **~|\|
+|\|~**     GAMES     **~|\|
+|\|~**   ~   *   ~   **~|\|
+|\|~*******************~|\|
+
+
+#nan{animation: 1}
+
+#SnakeDiv {
+    display: flex;
+    margin-left: 40px;
+}
+#Info-Snake {
+    margin-left: 20px;
+    background-color: #b4b4b4;
+    border: #3a2700 10px solid;
+    border-radius: 15px;
+    padding-left: 10px;
+    padding-right: 30px;
+    padding-bottom: 20px;
+    padding-top: 5px;
+    height: max-content;
+    font-size: 26px;
+}
+
+#Game-Snake {
+    width: 600px;
+    height: 600px;
+    border: #463000 15px solid;
+    border-radius: 20px;
+}
+
+#Play-Snake {
+    width: 200px;
+    height: 200px;
+    background-color: #cfcfcfa9;
+    position: relative;
+    top: -66.7%;
+    left: 33.3%;
+    border-radius: 35px;
+    transform: scale(1);
+} #Play-Snake:hover {
+    transform: scale(1.1);
+}
+
+#SnakeGrid {
+    display: flex;
+    padding: 0px;
+    background-color: #000000;
+    width: 600px;
+    height: 600px;
+    position: relative;
+}
+.SnakeSquare {
+    left: 0px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}.SnakeHeadSquare {
+    background-color: #00ff30;
+    left: 0px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}.SnakeAppleSquare {
+    background-color: #d80000;
+    left: 0px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}#Snake_Score {
+    position: absolute;
+    left: 275px;
+    top: 50px;
+    font-size: 70px;
 }
