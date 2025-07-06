@@ -3,6 +3,7 @@ const TickSpeed = 1000/60
 let CurrentGame = 0
 let inputs = []
 let deleteInput = 0
+let direction
 
 ////KEY PRESSED////
 document.addEventListener('keydown', function(event) {
@@ -45,7 +46,6 @@ let headX
 let headY
 let appleX
 let appleY
-let direction
 let Progress
 
 function GameStart_Snake() {
