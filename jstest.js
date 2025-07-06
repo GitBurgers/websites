@@ -20,9 +20,6 @@ const db = getDatabase(app);
 
 
 const c = console.log;
-const binId = "6811d2ea8960c979a59032a9";
-const apiKey = "$2a$10$GU10NEpr.zl4cTGT3wAtXuxlTMrDfoRyeJ4Rsg22uYR6CngccpY6K";
-const url = `https://api.jsonbin.io/v3/b/${binId}`;
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
 let selectedColor = 1;
@@ -108,28 +105,7 @@ document.addEventListener('keydown', function(event) {
     if (event.key == "|") {document.getElementById("STimeAdd").style.backgroundColor = '#bbbbbb'}
 });
 
-/*///DATA LOADED///
-function StartLoad() {document.getElementById("loadC").style.cursor = "wait";document.body.style.cursor = "wait";loadDays();}
-function loadDays() {
-    dayStates["studyTime"] = Math.round(dayStates["studyTime"]);
-    fetch(url, {
-        headers: { 'X-Master-Key': apiKey }
-    })
-    .then(res => res.json())
-    .then(data => {
-        dayStates = data.record.days;
-        hasLoaded = 1;
-        buildCalendar();
-        document.body.style.cursor = null
-        PrevSTime = dayStates["studyTime"];
-        document.getElementById("loadC").style.backgroundColor = "#b3b3b3";
-        document.getElementById("loadC").style.cursor = "default";
-        document.getElementById("STimeAdd").style.backgroundColor = '#bbbbbb';
-    })
-    .catch(err => console.error("Error loading data:", err));
-}*/
-
-//NEW LOAD//
+///LOAD///
 window.StartLoad = StartLoad;
 function StartLoad() {document.getElementById("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
 function newLoadDays() {
@@ -137,7 +113,7 @@ function newLoadDays() {
     document.body.style.cursor = "wait";
 
     const dbRef = ref(db);
-    get(child(dbRef, "days")).then((snapshot) => {
+    get(child(dbRef, "calendar")).then((snapshot) => {
         if (snapshot.exists()) {
             dayStates = snapshot.val();
             dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
@@ -156,35 +132,13 @@ function newLoadDays() {
     });
 }
 
-
-/*///DATA SAVED///
-function saveDays() {
-    document.body.style.cursor = "wait";
-    document.getElementById("saveEvent").style.cursor = "wait";
-    fetch(url, {
-        method: "PUT",
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': apiKey
-        },
-        body: JSON.stringify({ days: dayStates })
-    })
-    .then(res => res.json())
-    .then(data => {
-        hasUnsavedChanges = false;
-        document.body.style.cursor = "default";
-        document.getElementById("saveEvent").style.cursor = "default";
-    })
-    .catch(err => console.error("Save error:", err));
-}*/
-
-//NEW SAVE//
+///SAVE///
 window.storeDays = storeDays;
 function storeDays() {
     document.body.style.cursor = "wait";
     document.getElementById("saveEvent").style.cursor = "wait";
 
-    set(ref(db, "days"), dayStates)
+    set(ref(db, "calendar"), dayStates)
     .then(() => {
         hasUnsavedChanges = false;
         document.body.style.cursor = "default";
@@ -194,7 +148,6 @@ function storeDays() {
         console.error("Save error:", error);
     });
 }
-
 
 // Show saved event in tooltip and visual style
 function renderTooltip(box, text) {
