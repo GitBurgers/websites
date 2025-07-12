@@ -1,3 +1,5 @@
+const testmode = 0
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -17,8 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-
-
 const c = console.log;
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -29,32 +29,33 @@ let PrevSTime = NaN;
 let TimerText = NaN;
 let TimerDetectSec = 0;
 let STelement = 0;
-/* April(4): 30
-May(5): 31
-June(6): 30
-*/
+
+let pressingControl = 0;
 let time = new Date();
-const day =  time.getDate();
+const day =  22//time.getDate();
 const Month =  time.getMonth() + 1;
-const startDay = 28;
-const startMonth = 4;
+const Year = time.getFullYear();
+const startDay = 21;
+const startMonth = 7;
 const monthDay = `${String(Month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 let tempWeekFind = day;
-if (Month > 4) {
-    tempWeekFind += 30;
-}
-if (Month > 5) {
+if (Month > 7) {
     tempWeekFind += 31;
 }
-if (Month > 6) {
-    tempWeekFind += 30;
+if (Month > 8) {
+    tempWeekFind += 31;
 }
+if (Month > 9) {
+    tempWeekFind += 30;
+} // To change the starting month, add more if() until it covers the whole calendar
+const MonthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September"]
 const week = Math.ceil((tempWeekFind-startDay) / 7);
 console.log(`${monthDay} is today`);
 console.log(`${week} is this week`);
 
 ////CONTENT LOADED////
 document.addEventListener("DOMContentLoaded", () => {
+    if (testmode) {document.getElementById("load_heading").hidden = "true";document.getElementById("loadC").hidden = "true"}
     buildCalendar();
     let colorButtons = document.querySelectorAll(".colorChange");
     colorButtons.forEach((btn, index) => {
@@ -71,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
     TimerText.setAttribute("minutes", 0);
     TimerText.setAttribute("clicked", "0");
     STelement = document.getElementById("STime");
+
+    document.getElementById("STimeAdd").hidden=true;document.getElementById("TimeB").hidden = true
     Loop();
 });
 
@@ -102,8 +105,13 @@ function Loop() {
 document.addEventListener('keydown', function(event) {
     if (event.key == " " && !hasLoaded) {document.getElementById("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     if (event.key == "?") {c(dayStates["studyTime"].toString() + ";" + totalStudyTime.toString() + ";" + PrevSTime.toString())}
-    if (event.key == "|") {document.getElementById("STimeAdd").style.backgroundColor = '#bbbbbb'}
+    if (event.key == "|") {}
+    if (event.key == "Control") {pressingControl = 1}
+}); document.addEventListener('keyup', function(event) {
+    if (event.key == "Control") {pressingControl = 0}
 });
+
+
 
 ///LOAD///
 window.StartLoad = StartLoad;
@@ -118,6 +126,7 @@ function newLoadDays() {
             dayStates = snapshot.val();
             dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
             hasLoaded = 1;
+            document.getElementById("STimeAdd").hidden=false;document.getElementById("TimeB").hidden = false;
             buildCalendar();
             PrevSTime = dayStates["studyTime"];
             document.getElementById("loadC").style.backgroundColor = "#b3b3b3";
@@ -162,12 +171,12 @@ function renderTooltip(box, text) {
 function buildCalendar() {
     const container = document.querySelector(".calendar-grid");
     container.innerHTML = "";
-    for (let i = 1; i <= 63; i++) {
+    for (let i = 1; i <= 70; i++) {
         if (i % 7 == 1) {
             const weekDiv = document.createElement("div");
             weekDiv.textContent = Math.ceil(i / 7)
             weekDiv.className = "weekDiv";
-            if (Math.ceil(i/7) % 2 == 1) {
+            if (Math.ceil(i/7) % 2 == 0) {
                 weekDiv.setAttribute("weekType", "b");
             } else {
                 weekDiv.setAttribute("weekType", "a");
@@ -190,17 +199,18 @@ function buildCalendar() {
         }
         const savedText = dayStates[dayKey] || "";
         renderTooltip(box, savedText);
-        let tempMonth = 4
+        let tempMonth = startMonth
         let displayDay = i+startDay-1
-        if (displayDay > 30 && tempMonth == 4) {
-            displayDay -= 30;
-            tempMonth++;
-        }
-        if (displayDay > 31 && tempMonth == 5) {
+        //Adjust this when changing the calendar starting month
+        if (displayDay > 31 && tempMonth == 7) {
             displayDay -= 31;
             tempMonth++;
         }
-        if (displayDay > 30 && tempMonth == 6) {
+        if (displayDay > 31 && tempMonth == 8) {
+            displayDay -= 31;
+            tempMonth++;
+        }
+        if (displayDay > 30 && tempMonth == 9) {
             displayDay -= 30;
             tempMonth++;
         }
@@ -250,10 +260,10 @@ function buildCalendar() {
         }
         box.setAttribute("data-date", `${String(tempMonth).padStart(2, '0')}-${String(displayDay).padStart(2, '0')}`);
         box.setAttribute("dayNum", displayDay)
-        if (monthDay == box.getAttribute("data-date")) {
+        if (monthDay == box.getAttribute("data-date")) { //If the box is today//
             box.setAttribute("today", "true");
             if (box.getAttribute("boxColor") == "thursday") {
-                document.getElementById("quickText").textContent = "Today: Piano"
+                document.getElementById("quickText").textContent = "Today: Piano/Tennis"
             } else if (box.getAttribute("boxColor") == "friSports") {
                 document.getElementById("quickText").textContent = "Today: Sport/PE, bring Sport Shoes"
             } else {
@@ -261,19 +271,17 @@ function buildCalendar() {
             }
         }
         box.addEventListener("click", () => {
+            if (!pressingControl) {
             const input = document.getElementById("eventInput");
             let text = input.value.trim();
-            if (selectedColor == 2 && input.value != "") {
-                text = (text+"")+"/o"
-            } if (selectedColor == 3 && input.value != "") {
-                text = (text+"")+"/r"
-            } if (selectedColor == 4 && input.value != "") {
-                text = (text+"")+"/g"
-            } if (selectedColor == 5 && input.value != "") {
-                text = (text+"")+"/p"
-            } if (selectedColor == 6 && input.value != "") {
-                text = (text+"")+"/c"
-            }
+            if (input.value != "") {
+                switch(selectedColor) {
+                    case 2: {text = (text+"")+"/o";break;}
+                    case 3: {text = (text+"")+"/r";break;}
+                    case 4: {text = (text+"")+"/g";break;}
+                    case 5: {text = (text+"")+"/p";break;}
+                    case 6: {text = (text+"")+"/c";break;}
+                }}
                 // Save or clear local data
             if (text !== "") {
                 dayStates[dayKey] = text;
@@ -308,7 +316,7 @@ function buildCalendar() {
             input.value = "";
             hasUnsavedChanges = true;
             modifyEvents()
-        });
+        }});
         container.appendChild(box);
         box.addEventListener("mouseenter", () => {
             let dayAdd = "";
@@ -317,6 +325,8 @@ function buildCalendar() {
             }else{
                 dayAdd = (((i-1+startDay)-tempWeekFind) + "");
             }
+            if (dayAdd.includes("+0")){dayAdd = "Today"}
+            dayAdd += `, ${MonthList[tempMonth-1]} ${displayDay} ${Year}`//`, ${displayDay}/${tempMonth}/${Year}`
             box.setAttribute("title", dayAdd)
         });
     }
@@ -332,12 +342,14 @@ function modifyEvents() {
         /*let lines = el.innerHTML.split("<br>").length;
         console.log("Logical lines:", lines); */
         let fontSize = 25 - (el.textContent.length / 1.5);
-        fontSize = Math.max(fontSize, 15)
+        fontSize = Math.max(fontSize, 14)
         el.style.fontSize = fontSize + "px";
         let text = el.innerHTML;
         // Replace '//' with <br>
-        let formatted = text.split("//").map(part => part.trim()).join("<br>");
-        el.innerHTML = formatted;
+        let formatted = 0
+        if (!text.includes("https://")) {formatted = text.split("//").map(part => part.trim()).join("<br>")
+            el.innerHTML = formatted;
+        }
     });
 }
 
