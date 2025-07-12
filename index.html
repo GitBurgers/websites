@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <title id="Title">Term 2 Calendar</title>
     <link rel="stylesheet" href="csstest.css">
-    <link rel="icon" href="White.png" type="image/png">
+    <link rel="icon" href="Logo.png" type="image/png">
+    <script src="javamain.js"></script>
+
+    <script type="module" src="javacalendar.js"></script>
+    <!--script src="javacalendar.js"></script-->
 </head>
 <body>
-    <script src="javamain.js"></script>
-    <script type="module" src="javacalendar.js"></script>
     <div id="topDiv">
         <div id="headline-1"><b>Term 3 Calendar</b></div>
-        <p id="quickText">Today: </p>
+        <p id="quickText">Today: No events</p>
     </div>
     <input type="text" id="eventInput"/>
     <button class="eventClear" onclick="clearInput()">✖️ Clear</button>
@@ -22,22 +24,24 @@
     <button class="colorChange" id="color-grey">g</button>
     <button class="colorChange" id="color-purple">p</button>
     <button class="colorChange" id="color-clear">c</button>
-    <button id="loadC" onclick="StartLoad()">Load</button>
     <button id="saveWarning"><b>!!</b></button>
     <button id="saveEvent"onclick="storeDays()">Save Changes</button>
 
     <div id="calendarScroll">
+        <div id="load_heading"></div>
+        <button id="loadC" onclick="StartLoad()">Load Calendar</button>
         <div class="calendar-grid"></div>
     </div>
 
     <div id="dueList">
         <h3 id="STime">Study Time:</h3>
         <button id="STimeAdd" onclick="STimeC()">Generate Time</button>
-        <button id="TimeB" onclick="Studying()">o
-            <div id="TimeD"></div>
+        <button id="TimeB" onclick="Studying()">▶
+            <!--div id="TimeD"></div-->
+            
         </button>
         <h2 id="Timer"></h2>
-        <h2>📚 Due Work</h2>
+        <h2 style="line-height: 30px;">📚 Due Work</h2>
     </div>
 </body>
 </html>
