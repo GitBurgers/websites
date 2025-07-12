@@ -159,7 +159,7 @@ function Snake_drawSquares() {
         SnakeSquare.style.top = `${(yPoses[i]*50)-50}px`
         SnakeSquare.className = "SnakeSquare"
         if(CurrentGame==-1){SnakeSquare.style.backgroundColor = `rgb(220, 0, 0)`}else{
-            SnakeSquare.style.backgroundColor = `rgb(0, ${Math.max(130, 240 - i * 3)}, 0)`}
+            SnakeSquare.style.backgroundColor = `rgb(0, ${Math.max(140, 240 - i * 3)}, 0)`}
         document.getElementById("SnakeGrid").appendChild(SnakeSquare)
     }
     let SnakeAppleSquare = document.createElement("div")
