@@ -8,6 +8,7 @@ body {
 
 #topDiv {
     display: flex;
+    margin-bottom: 20px;
 }
 #headline-1 {
     color: rgb(172, 172, 204);
@@ -94,6 +95,31 @@ _____________________________
     grid-template-columns: 25px repeat(7, 128px); /* extra column for week number */
     gap: 10px;
     padding: 20px;
+}
+#load_heading {
+    width: 1028px;
+    height: 110px;
+    margin-top: -10px;
+    margin-left: -10px;
+    position: absolute;
+    background-color: #00000071;
+}
+#loadC {
+    font-size: 27px; 
+    padding-left: 12px;
+    padding-right: 12px;
+    background-color: #dddddd;/*#b3b3b3;*/
+    cursor: pointer;
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 400px;
+    width: 220px;
+    height: 60px;
+    border: #9b9b9b 5px solid;
+}#loadC:hover {
+    transform: scale(1.05);
+}#loadC:active {
+    transform: scale(0.98);
 }
 
 .day-box {      /* || The main box || */
@@ -204,6 +230,7 @@ _____________________________
 } #eventInput:focus {
     border-color: #2196F3;
     box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+    width: 250px;
 }
 
 .eventClear {
@@ -249,15 +276,6 @@ _____________________________
 #color-purple.toggled { background-color: rgb(194, 167, 199); color:rgb(194, 167, 199); border: 5px solid;}
 #color-clear.toggled { background-color: rgb(100, 100, 100); color:rgb(100, 100, 100); border: 5px solid;}
 
-#loadC {
-    font-size: 24px; 
-    padding-left: 12px;
-    padding-right: 12px;
-    background-color: #dddddd;/*#b3b3b3;*/
-    cursor: pointer;
-}#loadC:active {
-    transform: scale(0.98);
-}
 #saveWarning {
     background-color: rgba(0, 0, 0, 0);
     border-color: rgba(0, 0, 0, 0);
@@ -317,9 +335,12 @@ _____________________________
     border-radius: 20px;
     width: 60px;
     height: 42px;
+    margin-left: 10px;
     font-size: 30px;
-    color: #00000000;
+    /*color: #00000000;*/
     cursor: pointer;
+    position: absolute;
+    line-height: 35px;
 } #TimeB:active {
     transform: scale(0.98);
 } #TimeD {
