@@ -1,5 +1,5 @@
-const testmode = 0
 
+/*
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -18,6 +18,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+*/
 
 const c = console.log;
 let dayStates = {}; // Store event text per day
@@ -31,6 +32,7 @@ let TimerDetectSec = 0;
 let STelement = 0;
 
 let pressingControl = 0;
+let pressingBacktick = 0;
 let time = new Date();
 const day =  22//time.getDate();
 const Month =  time.getMonth() + 1;
@@ -55,7 +57,7 @@ console.log(`${week} is this week`);
 
 ////CONTENT LOADED////
 document.addEventListener("DOMContentLoaded", () => {
-    if (testmode) {document.getElementById("load_heading").hidden = "true";document.getElementById("loadC").hidden = "true"}
+    if (Testmode){document.getElementById("load_heading").hidden="true";document.getElementById("loadC").hidden="true"}
     buildCalendar();
     let colorButtons = document.querySelectorAll(".colorChange");
     colorButtons.forEach((btn, index) => {
@@ -107,8 +109,12 @@ document.addEventListener('keydown', function(event) {
     if (event.key == "?") {c(dayStates["studyTime"].toString() + ";" + totalStudyTime.toString() + ";" + PrevSTime.toString())}
     if (event.key == "|") {}
     if (event.key == "Control") {pressingControl = 1}
+    if (event.key == "`") {pressingBacktick = 1}
+    if (event.key == "1" && pressingBacktick) {ISADMIN = 1}
+    //c(event.key)
 }); document.addEventListener('keyup', function(event) {
     if (event.key == "Control") {pressingControl = 0}
+    if (event.key == "`") {pressingBacktick = 0}
 });
 
 
@@ -121,12 +127,13 @@ function newLoadDays() {
     document.body.style.cursor = "wait";
 
     const dbRef = ref(db);
-    get(child(dbRef, "calendar")).then((snapshot) => {
+    get(child(dbRef, "Admin/Calendar")).then((snapshot) => {
         if (snapshot.exists()) {
+            const newdata = snapshot.val()
             dayStates = snapshot.val();
             dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
             hasLoaded = 1;
-            document.getElementById("STimeAdd").hidden=false;document.getElementById("TimeB").hidden = false;
+            document.getElementById("STimeAdd").hidden=true;document.getElementById("TimeB").hidden = true;
             buildCalendar();
             PrevSTime = dayStates["studyTime"];
             document.getElementById("loadC").style.backgroundColor = "#b3b3b3";
