@@ -1,4 +1,4 @@
-window.Testmode = 1
+window.Testmode = 0
 window.ISADMIN = 0
 window.User = 0
 if (Testmode){ISADMIN=1; User="Admin"}else{ISADMIN=0}
