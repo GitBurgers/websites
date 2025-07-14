@@ -134,6 +134,7 @@ function newLoadDays() {
             dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
             hasLoaded = 1;
             document.getElementById("STimeAdd").hidden=true;document.getElementById("TimeB").hidden = true;
+            document.getElementById("load_heading").hidden=false;document.getElementById("loadC").hidden=false;
             buildCalendar();
             PrevSTime = dayStates["studyTime"];
             document.getElementById("loadC").style.backgroundColor = "#b3b3b3";
