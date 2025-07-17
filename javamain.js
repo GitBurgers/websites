@@ -1,4 +1,4 @@
-sessionStorage.setItem("Testmode",1)
+sessionStorage.setItem("Testmode",0)
 // gss: Get Session Storage
 // sss: Set Session Storage
 // 1: Testmode  2: ISADMIN  3: User
