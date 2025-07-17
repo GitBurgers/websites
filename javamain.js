@@ -1,7 +1,27 @@
-window.Testmode = 0
-window.ISADMIN = 0
-window.User = 0
-if (Testmode){ISADMIN=1; User="Admin"}else{ISADMIN=0}
+sessionStorage.setItem("Testmode",1)
+// gss: Get Session Storage
+// sss: Set Session Storage
+// 1: Testmode  2: ISADMIN  3: User
+window.c = console.log
+window.getel = function getel(el) {return document.getElementById(el)}
+
+window.gss = function gss(type) {
+    c("get "+type)
+    if (type==1){return(sessionStorage.getItem("Testmode"))}
+    if (type==2){return(sessionStorage.getItem("ISADMIN"))}
+    if (type==3){return(sessionStorage.getItem("User"))}
+}
+window.sss = function sss(type, set) {
+    c("set "+type+" to "+set)
+    if (type==1){return(sessionStorage.setItem("Testmode", set))}
+    if (type==2){return(sessionStorage.setItem("ISADMIN", set))}
+    if (type==3){return(sessionStorage.setItem("User", set))}
+}
+
+if (gss(2) === null) {
+    if (gss(1)==1){sss(2, 1)} else {sss(2, 0)}
+    if (gss(1)==1){sss(3, "Admin")} else {sss(3, 0)}
+}
 
 let TopBar
 let TopBar1
@@ -27,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         TopBar2.innerHTML = '<b><a class="TopA" href="Games.html">&nbsp &nbsp &nbsp &nbsp &nbspGames &nbsp &nbsp &nbsp &nbsp &nbsp</a></b>';
         TopBar2.className = "TopBarEl";
         TopBar2.id = "TopBar2";
-        if (ISADMIN) {
+        if (gss(2)==1) {
             TopBar3.innerHTML = '<b><a class="TopA" href="Games.html">&nbsp &nbsp &nbsp &nbsp &nbsp Music &nbsp &nbsp &nbsp &nbsp &nbsp</a></b>';
             TopBar3.className = "TopBarEl";
             TopBar3.id = "TopBar3";
@@ -44,6 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
             TopBar1.remove();
             TopBar2.remove();
             TopBar3.remove();
-        });
-    });
-});
+        })
+    })
+})
