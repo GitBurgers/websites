@@ -1,13 +1,11 @@
-const c = console.log
 const TickSpeed = 1000/60
 let CurrentGame = 0
 let inputs = []
 let deleteInput = 0
-let direction
 
 ////KEY PRESSED////
 document.addEventListener('keydown', function(event) {
-    if (event.key == "/") {c(`headx=${headX} heady=${headY} xposes=${xPoses} yposes=${yPoses} inputs=${inputs}`)}
+    if (event.key == "/") {}
     if (event.key == "?") {c(CurrentGame)}
     if (CurrentGame == 1) {
         if (event.key == "ArrowUp"&&!inputs.includes(1)) {inputs.push(1);inputs=inputs.filter(item => item != 3)}
@@ -33,11 +31,12 @@ document.addEventListener('keyup', function(event) {
 
 ////DOC LOADED////
 document.addEventListener("DOMContentLoaded", () => {
-    ResetData_Snake()
+    ResetData_Snake(1)
     Snake_drawSquares()
 });
 
-{ //SNAKE BEGINS//
+//__SNAKE BEGINS__//
+let direction
 let xPoses = []
 let yPoses = []
 let xPoses2 = []
@@ -49,16 +48,15 @@ let appleY
 let Progress
 
 function GameStart_Snake() {
-    ResetData_Snake()
-    document.getElementById("Play-Snake").hidden = true;
+    ResetData_Snake(0)
+    getel("Play-Snake").hidden = true;
     xPoses2 = xPoses
     yPoses2 = yPoses
     Snake_drawSquares()
     Snake_loop()
-    c(`game ${CurrentGame}`)
 }
 
-function ResetData_Snake() {
+function ResetData_Snake(resetApple) {
     CurrentGame = 1
     xPoses = [6,5,4]
     yPoses = [7,7,7]
@@ -69,8 +67,8 @@ function ResetData_Snake() {
     headY = 7
     direction = 0
     Progress = 1
-    appleX = Math.round(Math.random()*11)+1
-    appleY = Math.round(Math.random()*3)+1
+    if(resetApple) {appleX = Math.round(Math.random()*11)+1
+    appleY = Math.round(Math.random()*3)+1}
 }
 
 function Snake_loop() {
@@ -151,7 +149,7 @@ function Snake_loop() {
 }
 
 function Snake_drawSquares() {
-    document.getElementById("SnakeGrid").innerHTML = ""
+    getel("SnakeGrid").innerHTML = ""
 
     for (i=xPoses.length-1; i>=0; i--) {
         let SnakeSquare = document.createElement("div")
@@ -160,13 +158,13 @@ function Snake_drawSquares() {
         SnakeSquare.className = "SnakeSquare"
         if(CurrentGame==-1){SnakeSquare.style.backgroundColor = `rgb(220, 0, 0)`}else{
             SnakeSquare.style.backgroundColor = `rgb(0, ${Math.max(140, 240 - i * 3)}, 0)`}
-        document.getElementById("SnakeGrid").appendChild(SnakeSquare)
+        getel("SnakeGrid").appendChild(SnakeSquare)
     }
     let SnakeAppleSquare = document.createElement("div")
     SnakeAppleSquare.style.left = `${appleX*50-50}px`
     SnakeAppleSquare.style.top = `${appleY*50-50}px`
     SnakeAppleSquare.className = "SnakeAppleSquare"
-    document.getElementById("SnakeGrid").appendChild(SnakeAppleSquare)
+    getel("SnakeGrid").appendChild(SnakeAppleSquare)
 
     let SnakeHeadSquare = document.createElement("div")
     SnakeHeadSquare.style.left = `${headX*50-50}px`
@@ -174,17 +172,16 @@ function Snake_drawSquares() {
     SnakeHeadSquare.className = "SnakeHeadSquare"
     if(CurrentGame==-1){SnakeHeadSquare.style.backgroundColor = `rgb(220, 0, 0)`}else{
         SnakeHeadSquare.style.backgroundColor = `#00ff30`}
-    document.getElementById("SnakeGrid").appendChild(SnakeHeadSquare)
+    getel("SnakeGrid").appendChild(SnakeHeadSquare)
 
     let Snake_Score = document.createElement("div")
     Snake_Score.id = "Snake_Score"
     Snake_Score.innerText = xPoses.length - 3
-    document.getElementById("SnakeGrid").appendChild(Snake_Score)
+    getel("SnakeGrid").appendChild(Snake_Score)
 }
 
 function Snake_dead(d) {
-    c(d)
     CurrentGame = -1
     Snake_drawSquares()
-    document.getElementById("Play-Snake").hidden = false;
-}}//SNAKE END// 190-39 = 151
+    getel("Play-Snake").hidden = false;
+}//__SNAKE END__// 187-39 = 148
