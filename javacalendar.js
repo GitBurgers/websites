@@ -19,7 +19,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
-
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
 let selectedColor = 1;
@@ -486,11 +485,13 @@ function TimeCounter() {
     (Math.round(dayStates["studyTime"]).toString() + ":" + (59 - secs).toString().padStart(2,"0") + " / " + PrevSTime.toString());
 }
 
+window.NotLoggedIn = NotLoggedIn;
 function NotLoggedIn() {
     if (gss(3)==0) {
         getel("LogInBg").hidden = false
     }
 }
+window.LogIn = LogIn;
 function LogIn() {
     let uservalue = getel("LogInput").value
     if (uservalue != "Admin" && uservalue != "") {
@@ -501,6 +502,7 @@ function LogIn() {
         StartLoad()
     }
 }}
+window.CancelLogIn = CancelLogIn;
 function CancelLogIn() {
     getel("LogInBg").hidden = true
 }
