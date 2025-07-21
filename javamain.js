@@ -6,13 +6,13 @@ window.c = console.log
 window.getel = function getel(el) {return document.getElementById(el)}
 
 window.gss = function gss(type) {
-    c("get "+type)
+    //c("get "+type)
     if (type==1){return(sessionStorage.getItem("Testmode"))}
     if (type==2){return(sessionStorage.getItem("ISADMIN"))}
     if (type==3){return(sessionStorage.getItem("User"))}
 }
 window.sss = function sss(type, set) {
-    c("set "+type+" to "+set)
+    //c("set "+type+" to "+set)
     if (type==1){return(sessionStorage.setItem("Testmode", set))}
     if (type==2){return(sessionStorage.setItem("ISADMIN", set))}
     if (type==3){return(sessionStorage.setItem("User", set))}
