@@ -185,3 +185,8 @@ function Snake_dead(d) {
     Snake_drawSquares()
     getel("Play-Snake").hidden = false;
 }//__SNAKE END__// 187-39 = 148
+
+
+function Snake_ShowMore() {
+    getel("Info-Snake").innerHTML = "Instructions:<br>Arrow keys to move<br>Space to reset<br>________<br>Started 29/6/2025<br>Finished 6/7/2025<br>148 lines of Javascript"
+}
