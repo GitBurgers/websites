@@ -35,6 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
     TopBar = document.createElement("div");
     TopBar.className = "TopBar"
     document.body.appendChild(TopBar);
+    if (gss(2) === null) {
+        if (gss(1)==1){sss(2, 1)} else {sss(2, 0)}
+        if (gss(1)==1){sss(3, "Admin")} else {sss(3, 0)}
+    }
 
     headline.addEventListener("mouseenter", () => {
         TopBar1 = document.createElement("div");
