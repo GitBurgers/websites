@@ -1,4 +1,4 @@
-/*
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -18,7 +18,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-*/
+
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
