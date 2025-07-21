@@ -1,7 +1,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+//import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // 🔑 Your Firebase config
 const firebaseConfig = {
@@ -154,7 +154,7 @@ function newLoadDays() {
         } else {
             console.error("No data available");
             getel("load_message").innerText = "Creating a new profile..."
-            update(ref(db, gss(3)), {
+            set(ref(db, gss(3)), {
                 Calendar: {
                     studyTime: 0
                 },
