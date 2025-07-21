@@ -153,6 +153,7 @@ function newLoadDays() {
             document.body.style.cursor = "default";
         } else {
             console.error("No data available");
+            getel("load_message").innerText = "Creating a new profile..."
         }
     }).catch((error) => {
         console.error("Error loading data:", error);
