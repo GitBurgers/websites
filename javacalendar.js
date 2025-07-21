@@ -151,6 +151,7 @@ function newLoadDays() {
             getel("loadC").style.cursor = "default";
             getel("STimeAdd").style.backgroundColor = '#bbbbbb';
             document.body.style.cursor = "default";
+            getel("load_message").innerText = ""
         } else {
             console.error("No data available");
             getel("load_message").innerText = "Creating a new profile..."
