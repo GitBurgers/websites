@@ -181,7 +181,7 @@ _____________________________
 }
 #load_heading {
     width: 1028px;
-    height: 110px;
+    height: 130px;
     margin-top: -10px;
     margin-left: -10px;
     position: absolute;
@@ -203,6 +203,14 @@ _____________________________
     transform: scale(1.05);
 }#loadC:active {
     transform: scale(0.98);
+}
+#load_message {
+    position: absolute;
+    left: 410px;
+    top: 230px;
+    text-align: center;
+    font-size: x-large;
+    color: #d37474;
 }
 
 .day-box {      /* || The main box || */
