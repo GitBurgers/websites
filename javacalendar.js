@@ -163,7 +163,7 @@ function newLoadDays() {
                     Snake_Score: 0
                 },
                 Profile: {
-                    createdAt: monthDay
+                    createdAt: (day.toString()+"-"+Month.toString()+"-"+Year.toString())
                 }
             });
             setTimeout(newLoadDays, 2000);
