@@ -1,4 +1,4 @@
-
+/*
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -17,6 +17,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+*/
 
 
 let dayStates = {}; // Store event text per day
@@ -28,16 +29,19 @@ let PrevSTime = NaN;
 let TimerText = NaN;
 let TimerDetectSec = 0;
 let STelement = 0;
-
 let pressingControl = 0;
 let pressingBacktick = 0;
 let loadclicked = 0;
 let time = new Date();
-const day =  21//time.getDate();
+const day =  time.getDate();
 const Month =  time.getMonth() + 1;
 const Year = time.getFullYear();
+
+//Calendar_Settings:
 const startDay = 21;
 const startMonth = 7;
+const startWeek = 0; // 0=A, 1=B
+
 const monthDay = `${String(Month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 let tempWeekFind = day;
 if (Month > 7) {
@@ -152,6 +156,7 @@ function newLoadDays() {
         }
     }).catch((error) => {
         console.error("Error loading data:", error);
+        getel("load_message").innerText = "Failed to load"
     });
 }
 
@@ -161,7 +166,7 @@ function storeDays() {
     document.body.style.cursor = "wait";
     getel("saveEvent").style.cursor = "wait";
 
-    set(ref(db, "calendar"), dayStates)
+    set(ref(db, `${gss(3)}/Calendar`), dayStates)
     .then(() => {
         hasUnsavedChanges = false;
         document.body.style.cursor = "default";
@@ -190,7 +195,7 @@ function buildCalendar() {
             const weekDiv = document.createElement("div");
             weekDiv.textContent = Math.ceil(i / 7)
             weekDiv.className = "weekDiv";
-            if (Math.ceil(i/7) % 2 == 0) {
+            if (Math.ceil(i/7) % 2 == startWeek) {
                 weekDiv.setAttribute("weekType", "b");
                 weekDiv.setAttribute("title", "Week B")
             } else {
@@ -207,11 +212,12 @@ function buildCalendar() {
         if (i % 7 == 0 || i % 7 == 6) {
             box.setAttribute("boxColor", "weekend")
         }
-        if (i % 7 == 4) {
-            box.setAttribute("boxColor", "thursday")
-        }
-        if ((i % 7 == 5 && Math.ceil(i/7) % 2 == 1) || (i % 7 == 2 && Math.ceil(i/7) % 2 == 1)) {
-            box.setAttribute("boxColor", "friSports")
+        if (gss(2)==1 || gss(1)==1) {
+            if (i % 7 == 4) {
+                box.setAttribute("boxColor", "thursday")
+            }}
+            if ((i % 7 == 5 && Math.ceil(i/7) % 2 == startWeek) || (i % 7 == 2 && Math.ceil(i/7) % 2 == startWeek)) {
+                box.setAttribute("boxColor", "friSports")
         }
         const savedText = dayStates[dayKey] || "";
         renderTooltip(box, savedText);
@@ -351,8 +357,6 @@ function buildCalendar() {
 function modifyEvents() {
     let getText = document.querySelectorAll(".event-text");
     getText.forEach(el => {
-        /*let lines = el.innerHTML.split("<br>").length;
-        console.log("Logical lines:", lines); */
         let fontSize = 25 - (el.textContent.length / 1.5);
         fontSize = Math.max(fontSize, 14)
         el.style.fontSize = fontSize + "px";
