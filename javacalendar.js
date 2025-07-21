@@ -1,6 +1,7 @@
-
+/*
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // 🔑 Your Firebase config
 const firebaseConfig = {
@@ -17,7 +18,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
+*/
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -153,6 +154,18 @@ function newLoadDays() {
         } else {
             console.error("No data available");
             getel("load_message").innerText = "Creating a new profile..."
+            update(ref(db, gss(3)), {
+                Calendar: {
+                    studyTime: 0
+                },
+                Games: {
+                    Snake_Score: 0
+                },
+                Profile: {
+                    createdAt: monthDay
+                }
+            });
+            setTimeout(newLoadDays, 2000);
         }
     }).catch((error) => {
         console.error("Error loading data:", error);
