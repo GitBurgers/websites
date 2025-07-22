@@ -1,4 +1,3 @@
-[]
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -286,6 +285,8 @@ function buildCalendar() {
             ? `<div class="day-num">${displayDay}</div><div class="event-text">${trimmed}</div>`
             : `<div class="day-num">${displayDay}</div>`;
             box.setAttribute("priority", (savedText[1]+savedText[2]));
+        } else {
+            box.setAttribute("priority", 14);
         }
         box.setAttribute("data-date", `${String(tempMonth).padStart(2, '0')}-${String(displayDay).padStart(2, '0')}`);
         box.setAttribute("dayNum", displayDay)
@@ -323,6 +324,9 @@ function buildCalendar() {
             }
             if (text.includes("/r")) {
                 let trimmed2 = text.slice(0, -2);
+                if (text[0] == "#") {
+                    trimmed2 = trimmed2.slice(3);
+                }
                 box.innerHTML = `<div class="day-num">${box.getAttribute("dayNum")}</div><div class="event-text">${trimmed2}</div>`
                 box.setAttribute("boxEventColor", "red")
             } else if (text.includes("/o")){
@@ -349,7 +353,7 @@ function buildCalendar() {
             input.value = "";
             hasUnsavedChanges = true;
             modifyEvents()
-            setTimeout(dueWorkList, 500)
+            setTimeout(dueWorkList, 300)
         }});
         container.appendChild(box);
         box.addEventListener("mouseenter", () => {
@@ -396,8 +400,8 @@ function dueWorkList() {
     let taskList = []
     let urgentTaskList = []
     const dueContainer = getel("dueList");
-    getel("dueText").innerHTML = "📚 Due Work" // Clears the due work
-    for (let i = 1; i <= 100; i++) {
+    dueContainer.querySelectorAll(".newDue").forEach(el => el.remove());
+    for (let i = 1; i < 100; i++) {
         let tempKey = "day" + i;
         if (dayStates[tempKey] && dayStates[tempKey].trim() !== "") {
             let newDue = document.createElement("p");
