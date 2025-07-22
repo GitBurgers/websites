@@ -1,3 +1,4 @@
+[]
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -112,8 +113,8 @@ function Loop() {
 
 ////KEY PRESSED////
 document.addEventListener('keydown', function(event) {
-    if (event.key == " " && !hasLoaded) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
-    if (event.key == "?") {c(dayStates["studyTime"].toString() + ";" + totalStudyTime.toString() + ";" + PrevSTime.toString())}
+    if (event.key == " " && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
+    if (event.key == "?") {c(dayStates)}
     if (event.key == "|") {}
     if (event.key == "Control") {pressingControl = 1}
     if (event.key == "`") {pressingBacktick = 1}
@@ -129,7 +130,7 @@ document.addEventListener('keydown', function(event) {
 ///LOAD///
 window.StartLoad = StartLoad;
 function StartLoad() {
-    if (gss(3)!=0) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
+    if (gss(3)!=0||gss(3)!="0") {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     else {getel("LogInBg").hidden = false; loadclicked = 1}
 }
 function newLoadDays() {
@@ -166,7 +167,7 @@ function newLoadDays() {
                     createdAt: (day.toString()+"-"+Month.toString()+"-"+Year.toString())
                 }
             });
-            setTimeout(newLoadDays, 2000);
+            setTimeout(newLoadDays, 100);
         }
     }).catch((error) => {
         console.error("Error loading data:", error);
@@ -348,6 +349,7 @@ function buildCalendar() {
             input.value = "";
             hasUnsavedChanges = true;
             modifyEvents()
+            setTimeout(dueWorkList, 500)
         }});
         container.appendChild(box);
         box.addEventListener("mouseenter", () => {
@@ -394,6 +396,7 @@ function dueWorkList() {
     let taskList = []
     let urgentTaskList = []
     const dueContainer = getel("dueList");
+    getel("dueText").innerHTML = "📚 Due Work" // Clears the due work
     for (let i = 1; i <= 100; i++) {
         let tempKey = "day" + i;
         if (dayStates[tempKey] && dayStates[tempKey].trim() !== "") {
@@ -415,12 +418,12 @@ function dueWorkList() {
                     daysList.push(dayDifference(i));
                 } else {
                     if (dayDifference(i) < 3) {
-                        newDue.textContent = ("!!"+newDue.textContent);
-                        taskList.push(dayDifference(i));
-                    } else if (dayDifference(i) < 5) {
                         newDue.textContent = ("!"+newDue.textContent);
+                        taskList.push(dayDifference(i));
+                    }/* else if (dayDifference(i) < 5) {
+                        newDue.textContent = ("!"+newDue.textContent); // Give a warning if the task is close
                         urgentTaskList.push(dayDifference(i));
-                    }
+                    }*/
                 }
                 dueContainer.appendChild(newDue);
             }}}
