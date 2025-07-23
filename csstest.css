@@ -1,6 +1,6 @@
 body {
     /*background-color: #333333; */
-    background: radial-gradient(circle at 25% 50%, #414141 0%, #121212 200%);
+    background: radial-gradient(circle at 25% 50%, #444444 0%, #121212 140%);
     font-size: 24px;
     color: white; /* Change default text color */
     font-family: Arial, sans-serif
@@ -325,10 +325,10 @@ _____________________________
 }
 
 .eventClear {
-    width: 80px;
     height: 35px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 18px;
+    text-indent: -3px;
 } .eventClear:active {
     transform: scale(0.98);
     background-color: #d8cbcb;
@@ -340,6 +340,7 @@ _____________________________
     border-radius: 20px;
     cursor: pointer;
     font-size: 15px;
+    border: #000000 2px solid;
 }
 #color-green {
     background-color: #4CAF50;
@@ -358,7 +359,7 @@ _____________________________
     color: rgb(170, 133, 177);
 } #color-clear {
     background-color: rgb(65, 65, 65);
-        color: rgb(65, 65, 65);
+    color: rgb(65, 65, 65);
 }
 #color-green.toggled { background-color: #3ec743; color:#3ec743; border: 5px solid;}
 #color-or.toggled { background-color: #ffb444; color:#ffb444; border: 5px solid;}
@@ -377,7 +378,7 @@ _____________________________
 #saveEvent {
     background-color: #b3b3b3;
     width: 180px;
-    height: 35px;
+    height: 40px;
     cursor: pointer;
     font-size: 24px;
 }
