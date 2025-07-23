@@ -7,7 +7,8 @@
     <link rel="icon" href="Logo.png" type="image/png">
     <script src="javamain.js"></script>
 
-    <script type="module" src="javacalendar.js"></script>
+    <!--script type="module" src="javacalendar.js"--></script>
+    <script src="javacalendar.js"></script>
 </head>
 <body>
     <div id="topDiv">
@@ -35,12 +36,12 @@
     </div>
 
     <div id="dueList">
-        <h3 id="STime">Study Time:</h3>
-        <button id="STimeAdd" onclick="STimeC()">Generate Time</button>
-        <button id="TimeB" onclick="Studying()">▶
+        <h3 hidden id="STime">Study Time:</h3>
+        <button hidden id="STimeAdd" onclick="STimeC()">Generate Time</button>
+        <button hidden id="TimeB" onclick="Studying()">▶
             <!--div id="TimeD"></div-->
         </button>
-        <h2 id="Timer"></h2>
+        <h2 hidden id="Timer"></h2>
         <h2 id="dueText" style="line-height: 30px;">📚 Due Work</h2>
     </div>
 
