@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 //import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -18,7 +17,6 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -78,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
     TimerText.setAttribute("clicked", "0");
     STelement = getel("STime");
 
-    getel("STimeAdd").hidden=true;getel("TimeB").hidden = true
     if (gss(3)!=0) {getel("LoggedIn").innerText = "Logged in!"}
     if (gss(1)==1) {getel("LoggedIn").innerText = "In Test Mode"}
     Loop();
@@ -107,7 +104,7 @@ function Loop() {
     } else {STelement.style.color = "#ffffff"}
     if (getel("LogInput").value!=""){getel("LogIn").setAttribute("Ready","1")}
     else {getel("LogIn").setAttribute("Ready","0")}
-    setTimeout(Loop, 400)
+    setTimeout(Loop, 500)
 }
 
 ////KEY PRESSED////
@@ -143,7 +140,7 @@ function newLoadDays() {
             dayStates = snapshot.val();
             dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
             hasLoaded = 1;
-            getel("STimeAdd").hidden=false;getel("TimeB").hidden = false;
+            if(gss(2)==1){getel("STimeAdd").hidden=false;getel("TimeB").hidden = false;}
             getel("load_heading").hidden=true;getel("loadC").hidden=true;
             buildCalendar();
             PrevSTime = dayStates["studyTime"];
