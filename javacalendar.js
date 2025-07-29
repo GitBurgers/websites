@@ -140,7 +140,7 @@ function newLoadDays() {
             dayStates = snapshot.val();
             dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
             hasLoaded = 1;
-            if(gss(2)==1){getel("STimeAdd").hidden=false;getel("TimeB").hidden = false;}
+            if(gss(2)==1){getel("STimeAdd").hidden=false;getel("TimeB").hidden=false;getel("STime").hidden=false;getel("Timer").hidden=false;}
             getel("load_heading").hidden=true;getel("loadC").hidden=true;
             buildCalendar();
             PrevSTime = dayStates["studyTime"];
