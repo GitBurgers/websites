@@ -583,6 +583,7 @@ function loadTDL() {
         item.parentElement.remove();
     })
 
+    TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
     for (i in TDList) {
         let TDLabel = document.createElement("label");
         TDLabel.className = "checkbox-container";
@@ -590,3 +591,4 @@ function loadTDL() {
         getel("TDL").appendChild(TDLabel);
     }
 }
+
