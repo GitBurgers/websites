@@ -584,11 +584,12 @@ function loadTDL() {
     })
 
     TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
-    for (i in TDList) {
+    for (let i in TDList) {
         let TDLabel = document.createElement("label");
         TDLabel.className = "checkbox-container";
         TDLabel.innerHTML = `<input type="checkbox" class="checkbox" id="TDLCheck${i}" value="${TDList[i]}"><span class="custom-text">${TDList[i]}</span>`;
         getel("TDL").appendChild(TDLabel);
     }
 }
+
 
