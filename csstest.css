@@ -168,10 +168,9 @@ _____________________________
     overflow-y:auto;
     padding: 10px;
     box-shadow: 0 0 5px #000000;
-    background-color: #333333;
+    background-color: #2c2c2c;
     border: 6px solid;
     border-color: #000000;
-    margin-left: -5px;
 } 
 .calendar-grid {
     display: grid;  
@@ -452,6 +451,133 @@ _____________________________
     line-height: 0%;
 }
 
+
+#TDL {
+    width: 600px;
+    height: 350px;
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    overflow-y:auto;    
+    background: radial-gradient(circle at 0% 0%, #555555, #3c3c3c);
+    border: black 6px solid;
+    box-shadow: 0 0 5px #000000;
+}
+
+body {
+    background-color: #333;
+    font-size: x-large;
+    font-family: arial;
+    color: white;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.checkbox {
+    transform: scale(1.4);  
+    color: #ccc;
+}
+.custom-text {
+    margin-left: 10px;
+    color: #eee;
+    transition: color 0.2s;
+    user-select: none;
+}
+
+/* Hover effect on just the checkbox box */
+.checkbox-container:hover {
+    color: #eee;
+    transition: 0.2s;
+}
+.checkbox-container input:checked + .custom-text {
+    text-decoration: line-through;
+    color: gray;
+}
+.add_TDL {
+    align-items: center;
+    color: #ffffff;
+    background-color: #888;
+    border: #252525 2px solid;
+} #TDL_button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 40px;
+    line-height: 28px;
+    justify-content: center;
+    text-indent: -4px;
+    cursor: pointer;
+    margin-left: -4px;
+} #TDL_button:hover {
+    background-color: #aaa;
+} #TDL_button:active {
+    transform: scale(0.97);
+}
+#TDLInput {
+    width: 200px;
+    height: 32px;
+    transform: translate(-5%, -23%);
+    border-radius: 8px;
+    padding-left: 10px;
+    font-size: 20px;
+    margin-left: 10px;
+} #TDLInput::placeholder {
+    color: #eee;
+} #TDLInput:hover {
+    background-color: #999;
+} #TDLInput:focus {
+    outline: none;
+    background-color: #aaa;
+}
+#TDLInput2 {
+    width: 30px;
+    height: 32px;
+    transform: translate(-28%, -23%);
+    border-radius: 8px;
+    padding-left: 10px;
+    font-size: 20px;
+} #TDLInput2::placeholder {
+    color: #eee;
+} #TDLInput2:hover {
+    background-color: #999;
+} #TDLInput2:focus {
+    outline: none;
+    background-color: #aaa;
+}
+#TDLAddEnd {
+    height: 38px;
+    transform: translate(-50%, -23%);
+    border-radius: 8px;
+    font-size: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+} #TDLAddEnd:hover {
+    background-color: #aaa;
+} #TDLAddEnd:active {
+    transform: translate(-50%, -23%);
+    background-color: #bbb;
+}
+
+#TDL_del_button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 40px;
+    line-height: 10px;
+    justify-content: center;
+    text-indent: -2px;
+    cursor: pointer;
+    margin-left: -4px;
+} #TDL_del_button:hover {
+    background-color: #aaa;
+} #TDL_del_button:active {
+    transform: scale(0.97);
+}
 ___________________________
 |\|~*******************~|\|
 |\|~**   ~   *   ~   **~|\|
