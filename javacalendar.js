@@ -1,3 +1,5 @@
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 //import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -17,6 +19,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -78,6 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (gss(3)!=0) {getel("LoggedIn").innerText = "Logged in!"}
     if (gss(1)==1) {getel("LoggedIn").innerText = "In Test Mode"}
+
+    loadTDL();
     Loop();
 });
 
@@ -109,7 +114,7 @@ function Loop() {
 
 ////KEY PRESSED////
 document.addEventListener('keydown', function(event) {
-    if (event.key == " " && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
+    if (event.key == "Alt" && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     if (event.key == "?") {c(dayStates)}
     if (event.key == "|") {}
     if (event.key == "Control") {pressingControl = 1}
@@ -140,7 +145,7 @@ function newLoadDays() {
             dayStates = snapshot.val();
             dayStates["studyTime"] = Math.round(dayStates["studyTime"] || 0);
             hasLoaded = 1;
-            if(gss(2)==1){getel("STimeAdd").hidden=false;getel("TimeB").hidden=false;getel("STime").hidden=false;getel("Timer").hidden=false;}
+            if(gss(2)==1){getel("STimeAdd").hidden=false;getel("TimeB").hidden=false;getel("STime").hidden=false;getel("Timer").hidden=false}
             getel("load_heading").hidden=true;getel("loadC").hidden=true;
             buildCalendar();
             PrevSTime = dayStates["studyTime"];
@@ -174,6 +179,18 @@ function newLoadDays() {
 ///SAVE///
 window.storeDays = storeDays;
 function storeDays() {
+    let TDLInputs = getel("TDL").querySelectorAll("label input[type='checkbox']");
+    document.getElementById
+    TDLInputs.forEach(item => {
+        c(item.checked);
+        if(item.checked) {
+            TDList.splice(TDList.indexOf(item.value), 1);
+            localStorage.setItem("TDL", JSON.stringify(TDList));
+            //item.parentElement.remove();
+            loadTDL();
+        }
+    })
+    if (gss(2)==0) {
     document.body.style.cursor = "wait";
     getel("saveEvent").style.cursor = "wait";
 
@@ -186,6 +203,7 @@ function storeDays() {
     .catch((error) => {
         console.error("Save error:", error);
     });
+    }
 }
 
 // Show saved event in tooltip and visual style
@@ -527,4 +545,48 @@ function LogIn() {
 window.CancelLogIn = CancelLogIn;
 function CancelLogIn() {
     getel("LogInBg").hidden = true
+}
+
+let adding_TDL = 0;
+let TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
+window.TLD_add_start = TLD_add_start;
+function TLD_add_start() {
+    if (adding_TDL == 0) {
+        getel("TDLInput").hidden = false;
+        getel("TDLInput").focus();
+        getel("TDLInput2").hidden = false;
+        getel("TDLAddEnd").hidden = false;
+        adding_TDL = 1;
+    } else {
+        getel("TDLInput").hidden = true;
+        getel("TDLInput2").hidden = true;
+        getel("TDLAddEnd").hidden = true;
+        adding_TDL = 0;
+    }
+}
+
+window.TLD_add = TLD_add;
+function TLD_add() {
+    getel("TDLInput").hidden = true;
+    getel("TDLInput2").hidden = true;
+    getel("TDLAddEnd").hidden = true;
+    adding_TDL = 0;
+    TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
+    TDList.splice(getel("TDLInput2").value, 0, getel("TDLInput").value);
+    localStorage.setItem("TDL", JSON.stringify(TDList));
+    loadTDL();
+}
+
+function loadTDL() {
+    let TDLInputs2 = getel("TDL").querySelectorAll("label input[type='checkbox']");
+    TDLInputs2.forEach(item => {
+        item.parentElement.remove();
+    })
+
+    for (i in TDList) {
+        let TDLabel = document.createElement("label");
+        TDLabel.className = "checkbox-container";
+        TDLabel.innerHTML = `<input type="checkbox" class="checkbox" id="TDLCheck${i}" value="${TDList[i]}"><span class="custom-text">${TDList[i]}</span>`;
+        getel("TDL").appendChild(TDLabel);
+    }
 }
