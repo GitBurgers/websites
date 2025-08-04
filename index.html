@@ -7,7 +7,8 @@
     <link rel="icon" href="Logo.png" type="image/png">
     <script src="javamain.js"></script>
 
-    <script type="module" src="javacalendar.js"></script>
+    <!--script type="module" src="javacalendar.js"--></script>
+    <script src="javacalendar.js"></script>
 </head>
 <body>
     <div id="topDiv">
@@ -40,7 +41,7 @@
         <button hidden id="TimeB" onclick="Studying()">▶
             <!--div id="TimeD"></div-->
         </button>
-        <h2 hidden id="Timer"></h2>
+        <h2 id="Timer"></h2>
         <h2 id="dueText" style="line-height: 30px;">📚 Due Work</h2>
     </div>
 
@@ -51,6 +52,13 @@
             <button id="LogIn" onclick="LogIn()">Log In</button>
             <button id="cancelLogIn" onclick="CancelLogIn()">Cancel</button>
         </div>
+    </div>
+
+    <div id="TDL">
+        <button id="TDL_button" class="add_TDL" onclick="TLD_add_start()">+</button>
+        <input hidden type="text" id="TDLInput" class="add_TDL" placeholder="Add a task...">
+        <input hidden type="number" id="TDLInput2" class="add_TDL" placeholder="0">
+        <button hidden id="TDLAddEnd" class="add_TDL" onclick="TLD_add()">Add</button>
     </div>
 </body>
 </html>
