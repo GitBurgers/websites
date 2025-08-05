@@ -114,7 +114,7 @@ function Loop() {
 
 ////KEY PRESSED////
 document.addEventListener('keydown', function(event) {
-    if (event.key == "Alt" && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
+    if (event.key == "2" && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     if (event.key == "?") {c(dayStates)}
     if (event.key == "|") {}
     if (event.key == "Control") {pressingControl = 1}
@@ -190,7 +190,7 @@ function storeDays() {
             loadTDL();
         }
     })
-    if (gss(2)==0) {
+    if (!(gss(3)==0||gss(3)=="0")) {
     document.body.style.cursor = "wait";
     getel("saveEvent").style.cursor = "wait";
 
@@ -591,5 +591,6 @@ function loadTDL() {
         getel("TDL").appendChild(TDLabel);
     }
 }
+
 
 
