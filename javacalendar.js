@@ -1,5 +1,5 @@
 
-
+/*
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 //import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -19,7 +19,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
+*/
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -116,7 +116,7 @@ function Loop() {
 document.addEventListener('keydown', function(event) {
     if (event.key == "2" && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     if (event.key == "?") {c(dayStates)}
-    if (event.key == "|") {}
+    if (event.key == "|") {getPlayer(1)}
     if (event.key == "Control") {pressingControl = 1}
     if (event.key == "`") {pressingBacktick = 1}
     if (event.key == "1" && pressingBacktick) {sss(2, 1);getel("LoggedIn").innerText = "Welcome back Riley";sss(3,"Admin")}
@@ -592,5 +592,66 @@ function loadTDL() {
     }
 }
 
+// Open (or create) a database named "GameDB" with version 1
+const request = indexedDB.open("GameDB", 1);
 
+// Global variables
+let db;
+let addPlayer, getPlayer, updatePlayer, deletePlayer;
 
+// This runs only the first time or when you upgrade the DB version
+request.onupgradeneeded = function (event) {
+    const db = event.target.result;
+
+    // Create a store called "players", using 'id' as the unique key
+    const store = db.createObjectStore("players", { keyPath: "id" });
+};
+
+// When DB successfully opens
+request.onsuccess = function (event) {
+    const db = event.target.result;
+
+    addPlayer = function (player) {
+        const tx = db.transaction("players", "readwrite");
+        const store = tx.objectStore("players");
+        store.add(player);
+    };
+
+    getPlayer = function (id) {
+        const tx = db.transaction("players", "readonly");
+        const store = tx.objectStore("players");
+        const request = store.get(id);
+        request.onsuccess = () => {
+        console.log("Found player:", request.result);
+        };
+    };
+
+    updatePlayer = function (player) {
+        const tx = db.transaction("players", "readwrite");
+        const store = tx.objectStore("players");
+        store.put(player);
+    };
+
+    deletePlayer = function (id) {
+        const tx = db.transaction("players", "readwrite");
+        const store = tx.objectStore("players");
+        store.delete(id);
+    };
+}
+
+request.onerror = function () {
+    console.error("Failed to open IndexedDB");
+};
+
+setTimeout(() => {
+    if(getPlayer(1) == undefined) {
+        addPlayer({ id: 1, name: "Riley", score: 100 });
+    }
+    /*deletePlayer(1);
+    c("found " + getPlayer(1));*/
+}, 500);
+// ✅ EXAMPLE USAGE:
+/*addPlayer({ id: 1, name: "Riley", score: 100 });
+getPlayer(1);
+updatePlayer({ id: 1, name: "Riley", score: 200 });
+deletePlayer(1);*/
