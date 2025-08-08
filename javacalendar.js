@@ -607,7 +607,7 @@ request.onupgradeneeded = function (event) {
 
 // When DB successfully opens
 request.onsuccess = function (event) {
-    const db = event.target.result;
+    db = event.target.result;
 
     addPlayer = function (player) {
         const tx = db.transaction("players", "readwrite");
@@ -653,4 +653,5 @@ setTimeout(() => {
 getPlayer(1);
 updatePlayer({ id: 1, name: "Riley", score: 200 });
 deletePlayer(1);*/
+
 
