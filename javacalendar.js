@@ -1,7 +1,5 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-//import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // 🔑 Your Firebase config
 const firebaseConfig = {
@@ -594,7 +592,7 @@ function loadTDL() {
 const request = indexedDB.open("GameDB", 1);
 
 // Global variables
-let db;
+let db2;
 let addPlayer, getPlayer, updatePlayer, deletePlayer;
 
 // This runs only the first time or when you upgrade the DB version
@@ -607,16 +605,16 @@ request.onupgradeneeded = function (event) {
 
 // When DB successfully opens
 request.onsuccess = function (event) {
-    db = event.target.result;
+    db2 = event.target.result;
 
     addPlayer = function (player) {
-        const tx = db.transaction("players", "readwrite");
+        const tx = db2.transaction("players", "readwrite");
         const store = tx.objectStore("players");
         store.add(player);
     };
 
     getPlayer = function (id) {
-        const tx = db.transaction("players", "readonly");
+        const tx = db2.transaction("players", "readonly");
         const store = tx.objectStore("players");
         const request = store.get(id);
         request.onsuccess = () => {
@@ -625,13 +623,13 @@ request.onsuccess = function (event) {
     };
 
     updatePlayer = function (player) {
-        const tx = db.transaction("players", "readwrite");
+        const tx = db2.transaction("players", "readwrite");
         const store = tx.objectStore("players");
         store.put(player);
     };
 
     deletePlayer = function (id) {
-        const tx = db.transaction("players", "readwrite");
+        const tx = db2.transaction("players", "readwrite");
         const store = tx.objectStore("players");
         store.delete(id);
     };
@@ -653,5 +651,3 @@ setTimeout(() => {
 getPlayer(1);
 updatePlayer({ id: 1, name: "Riley", score: 200 });
 deletePlayer(1);*/
-
-
