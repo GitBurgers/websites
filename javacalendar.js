@@ -1,5 +1,7 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+//import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // 🔑 Your Firebase config
 const firebaseConfig = {
@@ -16,6 +18,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -112,7 +115,7 @@ function Loop() {
 document.addEventListener('keydown', function(event) {
     if (event.key == "2" && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     if (event.key == "?") {c(dayStates)}
-    if (event.key == "|") {getPlayer(1)}
+    if (event.key == "|") {c("Adding default player data...");addData({ id: 1, TDL: JSON.parse(localStorage.getItem("TDL")) || []});}
     if (event.key == "Control") {pressingControl = 1}
     if (event.key == "`") {pressingBacktick = 1}
     if (event.key == "1" && pressingBacktick) {sss(2, 1);getel("LoggedIn").innerText = "Welcome back Riley";sss(3,"Admin")}
@@ -182,23 +185,24 @@ function storeDays() {
         if(item.checked) {
             TDList.splice(TDList.indexOf(item.value), 1);
             localStorage.setItem("TDL", JSON.stringify(TDList));
+            updateData({ id: 1, TDL: TDList })
             //item.parentElement.remove();
             loadTDL();
         }
     })
-    if (!(gss(3)==0||gss(3)=="0")) {
-    document.body.style.cursor = "wait";
-    getel("saveEvent").style.cursor = "wait";
+    if (hasUnsavedChanges) {
+        document.body.style.cursor = "wait";
+        getel("saveEvent").style.cursor = "wait";
 
-    set(ref(db, `${gss(3)}/Calendar`), dayStates)
-    .then(() => {
-        hasUnsavedChanges = false;
-        document.body.style.cursor = "default";
-        getel("saveEvent").style.cursor = "default";
-    })
-    .catch((error) => {
-        console.error("Save error:", error);
-    });
+        set(ref(db, `${gss(3)}/Calendar`), dayStates)
+        .then(() => {
+            hasUnsavedChanges = false;
+            document.body.style.cursor = "default";
+            getel("saveEvent").style.cursor = "default";
+        })
+        .catch((error) => {
+            console.error("Save error:", error);
+        });
     }
 }
 
@@ -549,6 +553,8 @@ window.TLD_add_start = TLD_add_start;
 function TLD_add_start() {
     if (adding_TDL == 0) {
         getel("TDLInput").hidden = false;
+        getel("TDLInput").value = "";
+        getel("TDLInput2").value = "0";
         getel("TDLInput").focus();
         getel("TDLInput2").hidden = false;
         getel("TDLAddEnd").hidden = false;
@@ -567,9 +573,11 @@ function TLD_add() {
     getel("TDLInput2").hidden = true;
     getel("TDLAddEnd").hidden = true;
     adding_TDL = 0;
-    TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
+    TDList = TDLReturn;
+    c("TDLReturn is " + TDLReturn);
     TDList.splice(getel("TDLInput2").value, 0, getel("TDLInput").value);
-    localStorage.setItem("TDL", JSON.stringify(TDList));
+    //localStorage.setItem("TDL", JSON.stringify(TDList));
+    updateData({ id: 1, TDL: TDList })
     loadTDL();
 }
 
@@ -579,7 +587,8 @@ function loadTDL() {
         item.parentElement.remove();
     })
 
-    TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
+    //TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
+    TDList = TDLReturn;
     for (let i in TDList) {
         let TDLabel = document.createElement("label");
         TDLabel.className = "checkbox-container";
@@ -593,7 +602,8 @@ const request = indexedDB.open("GameDB", 1);
 
 // Global variables
 let db2;
-let addPlayer, getPlayer, updatePlayer, deletePlayer;
+let addData, getData, updateData, deleteData;
+let TDLReturn;
 
 // This runs only the first time or when you upgrade the DB version
 request.onupgradeneeded = function (event) {
@@ -607,28 +617,30 @@ request.onupgradeneeded = function (event) {
 request.onsuccess = function (event) {
     db2 = event.target.result;
 
-    addPlayer = function (player) {
+    addData = function (player) {
         const tx = db2.transaction("players", "readwrite");
         const store = tx.objectStore("players");
         store.add(player);
     };
 
-    getPlayer = function (id) {
+    getData = function (id) {
+        return new Promise((resolve, reject) => {
         const tx = db2.transaction("players", "readonly");
         const store = tx.objectStore("players");
         const request = store.get(id);
-        request.onsuccess = () => {
-        console.log("Found player:", request.result);
-        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+        });
     };
 
-    updatePlayer = function (player) {
+    updateData = function (id) {
         const tx = db2.transaction("players", "readwrite");
         const store = tx.objectStore("players");
-        store.put(player);
+        store.put(id);
     };
 
-    deletePlayer = function (id) {
+    deleteData = function (id) {
         const tx = db2.transaction("players", "readwrite");
         const store = tx.objectStore("players");
         store.delete(id);
@@ -639,15 +651,35 @@ request.onerror = function () {
     console.error("Failed to open IndexedDB");
 };
 
+async function getTDLData(id2) {
+    TDLReturn = await getData(id2);
+}
+/*
 setTimeout(() => {
-    if(getPlayer(1) == undefined) {
-        addPlayer({ id: 1, name: "Riley", score: 100 });
+    //deleteData(1); // Delete player with ID 1 if exists
+    if(1) {
+        c("Adding default player data...");
+        addData({ id: 1, TDL: JSON.parse(localStorage.getItem("TDL")) || []});
     }
-    /*deletePlayer(1);
-    c("found " + getPlayer(1));*/
-}, 500);
+}, 400);*/
+
+setTimeout(() => {
+    getTDLData(1).then(() => {
+        TDLReturn = TDLReturn.TDL || [];
+        c("TDL data loaded: ", TDLReturn);
+        loadTDL();
+    })
+}, 800);
+
+
 // ✅ EXAMPLE USAGE:
-/*addPlayer({ id: 1, name: "Riley", score: 100 });
-getPlayer(1);
-updatePlayer({ id: 1, name: "Riley", score: 200 });
-deletePlayer(1);*/
+/*addData({ id: 1, name: "Riley", score: 100 });
+getData(1);
+updateData({ id: 1, name: "Riley", score: 200 });
+deleteData(1);*/
+/*
+(async () => {
+        let player = await getData(1);
+        console.log("Player: ", player);
+        console.log("TDL: ", player.TDL);
+    })();*/
