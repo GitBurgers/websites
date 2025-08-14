@@ -1,7 +1,6 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-//import { ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // 🔑 Your Firebase config
 const firebaseConfig = {
@@ -18,7 +17,6 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -158,14 +156,11 @@ function newLoadDays() {
             getel("load_message").innerText = "Creating a new profile..."
             set(ref(db, gss(3)), {
                 Calendar: {
-                    studyTime: 0
-                },
+                    studyTime: 0},
                 Games: {
-                    Snake_Score: 0
-                },
+                    Snake_Score: 0},
                 Profile: {
-                    createdAt: (day.toString()+"-"+Month.toString()+"-"+Year.toString())
-                }
+                    createdAt: (day.toString()+"-"+Month.toString()+"-"+Year.toString())}
             });
             setTimeout(newLoadDays, 100);
         }
@@ -173,8 +168,19 @@ function newLoadDays() {
         console.error("Error loading data:", error);
         getel("load_message").innerText = "Failed to load"
     });
+    get(child(dbRef, `${gss(3)}/TDL`)).then((snapshot) => {
+        if (snapshot.exists()) {
+            TDList = snapshot.val();
+            if (TDList == null) {TDList = []}
+            loadTDL();
+        } else {
+            console.error("No TDL data available");
+            TDList = [];
+        }
+    })
 }
 
+let TDList = ["ph bd 9th", "Science", "RD"]
 ///SAVE///
 window.storeDays = storeDays;
 function storeDays() {
@@ -184,24 +190,27 @@ function storeDays() {
         c(item.checked);
         if(item.checked) {
             TDList.splice(TDList.indexOf(item.value), 1);
-            localStorage.setItem("TDL", JSON.stringify(TDList));
             updateData({ id: 1, TDL: TDList })
             //item.parentElement.remove();
             loadTDL();
         }
     })
-        document.body.style.cursor = "wait";
-        getel("saveEvent").style.cursor = "wait";
+    document.body.style.cursor = "wait";
+    getel("saveEvent").style.cursor = "wait";
 
-        set(ref(db, `${gss(3)}/Calendar`), dayStates)
+    set(ref(db, `${gss(3)}/Calendar`), dayStates)
         .then(() => {
             hasUnsavedChanges = false;
-            document.body.style.cursor = "default";
+            //document.body.style.cursor = "default";
             getel("saveEvent").style.cursor = "default";
         })
         .catch((error) => {
-            console.error("Save error:", error);
+            console.error("Save error with calendar:", error);
         });
+    set(ref(db, `${gss(3)}/TDL`), TDList)
+        .then(() => {
+            document.body.style.cursor = "default";
+        })
 }
 
 // Show saved event in tooltip and visual style
@@ -546,7 +555,6 @@ function CancelLogIn() {
 }
 
 let adding_TDL = 0;
-let TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
 window.TLD_add_start = TLD_add_start;
 function TLD_add_start() {
     if (adding_TDL == 0) {
@@ -571,8 +579,6 @@ function TLD_add() {
     getel("TDLInput2").hidden = true;
     getel("TDLAddEnd").hidden = true;
     adding_TDL = 0;
-    TDList = TDLReturn;
-    c("TDLReturn is " + TDLReturn);
     TDList.splice(getel("TDLInput2").value, 0, getel("TDLInput").value);
     //localStorage.setItem("TDL", JSON.stringify(TDList));
     updateData({ id: 1, TDL: TDList })
@@ -586,7 +592,6 @@ function loadTDL() {
     })
 
     //TDList = JSON.parse(localStorage.getItem("TDL") || "[]");
-    TDList = TDLReturn;
     for (let i in TDList) {
         let TDLabel = document.createElement("label");
         TDLabel.className = "checkbox-container";
@@ -594,7 +599,7 @@ function loadTDL() {
         getel("TDL").appendChild(TDLabel);
     }
 }
-
+/*
 // Open (or create) a database named "GameDB" with version 1
 const request = indexedDB.open("GameDB", 1);
 
@@ -652,14 +657,14 @@ request.onerror = function () {
 async function getTDLData(id2) {
     TDLReturn = await getData(id2);
 }
-/*
+
 setTimeout(() => {
     //deleteData(1); // Delete player with ID 1 if exists
     if(1) {
         c("Adding default player data...");
         addData({ id: 1, TDL: JSON.parse(localStorage.getItem("TDL")) || []});
     }
-}, 400);*/
+}, 400);
 
 setTimeout(() => {
     getTDLData(1).then(() => {
@@ -671,14 +676,14 @@ setTimeout(() => {
 
 
 // ✅ EXAMPLE USAGE:
-/*addData({ id: 1, name: "Riley", score: 100 });
+addData({ id: 1, name: "Riley", score: 100 });
 getData(1);
 updateData({ id: 1, name: "Riley", score: 200 });
-deleteData(1);*/
-/*
+deleteData(1);
+
 (async () => {
         let player = await getData(1);
         console.log("Player: ", player);
         console.log("TDL: ", player.TDL);
-    })();*/
-
+    })();
+*/
