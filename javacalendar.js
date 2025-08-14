@@ -180,7 +180,6 @@ function newLoadDays() {
     })
 }
 
-let TDList = ["ph bd 9th", "Science", "RD"]
 ///SAVE///
 window.storeDays = storeDays;
 function storeDays() {
@@ -686,5 +685,6 @@ deleteData(1);
         console.log("TDL: ", player.TDL);
     })();
 */
+
 
 
