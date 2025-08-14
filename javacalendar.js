@@ -581,7 +581,6 @@ function TLD_add() {
     adding_TDL = 0;
     TDList.splice(getel("TDLInput2").value, 0, getel("TDLInput").value);
     //localStorage.setItem("TDL", JSON.stringify(TDList));
-    updateData({ id: 1, TDL: TDList })
     loadTDL();
 }
 
@@ -687,3 +686,4 @@ deleteData(1);
         console.log("TDL: ", player.TDL);
     })();
 */
+
