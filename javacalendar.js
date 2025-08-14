@@ -113,7 +113,7 @@ function Loop() {
 document.addEventListener('keydown', function(event) {
     if (event.key == "2" && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
     if (event.key == "?") {c(dayStates)}
-    if (event.key == "|") {c("Adding default player data...");addData({ id: 1, TDL: JSON.parse(localStorage.getItem("TDL")) || []});}
+    if (event.key == "|") {c(TDList)}
     if (event.key == "Control") {pressingControl = 1}
     if (event.key == "`") {pressingBacktick = 1}
     if (event.key == "1" && pressingBacktick) {sss(2, 1);getel("LoggedIn").innerText = "Welcome back Riley";sss(3,"Admin")}
@@ -686,4 +686,5 @@ deleteData(1);
         console.log("TDL: ", player.TDL);
     })();
 */
+
 
