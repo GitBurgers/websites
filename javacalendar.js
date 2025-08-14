@@ -19,6 +19,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let dayStates = {}; // Store event text per day
+let TDList = [];
 let hasUnsavedChanges = false;
 let selectedColor = 1;
 let totalStudyTime = 0;
@@ -685,6 +686,7 @@ deleteData(1);
         console.log("TDL: ", player.TDL);
     })();
 */
+
 
 
 
