@@ -190,7 +190,6 @@ function storeDays() {
             loadTDL();
         }
     })
-    if (hasUnsavedChanges) {
         document.body.style.cursor = "wait";
         getel("saveEvent").style.cursor = "wait";
 
@@ -203,7 +202,6 @@ function storeDays() {
         .catch((error) => {
             console.error("Save error:", error);
         });
-    }
 }
 
 // Show saved event in tooltip and visual style
@@ -683,3 +681,4 @@ deleteData(1);*/
         console.log("Player: ", player);
         console.log("TDL: ", player.TDL);
     })();*/
+
