@@ -23,6 +23,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 /////////
+
+
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
 let selectedColor = 1;
@@ -119,15 +121,15 @@ function Loop() {
 
 ////KEY PRESSED////
 document.addEventListener('keydown', function(event) {
+    let calInput = getel("eventInput");
     if (event.key == "2" && !hasLoaded && gss(2)==1) {getel("loadC").style.cursor = "wait";document.body.style.cursor = "wait";newLoadDays()}
-    if (event.key == "?") {c(dayStates)}
-    if (event.key == "|") {c(TDList)}
-    if (event.key == "Control") {pressingControl = 1}
+    if (event.key == "?") {c("daystates = "+dayStates)}
+    if (event.key == "|") {c("TDList = "+TDList)}
+    if (event.key == "Control" && hasLoaded && document.activeElement !== calInput) {storeDays()}
     if (event.key == "`") {pressingBacktick = 1}
     if (event.key == "1" && pressingBacktick) {sss(2, 1);getel("LoggedIn").innerText = "Welcome back Riley";sss(3,"Admin")}
     //c(event.key)
 }); document.addEventListener('keyup', function(event) {
-    if (event.key == "Control") {pressingControl = 0}
     if (event.key == "`") {pressingBacktick = 0}
 });
 
@@ -451,7 +453,7 @@ function dueWorkList() {
                     newDue.setAttribute("dueColor", "red")
                     newDue.textContent = newDue.textContent.slice(0, -2);
                     if (newDue.textContent.includes("#")) {
-                        c(dayStates[tempKey][1].toString()+dayStates[tempKey][2].toString());
+                        //c(dayStates[tempKey][1].toString()+dayStates[tempKey][2].toString());
                         priorityList.push(Number(dayStates[tempKey][1].toString()+dayStates[tempKey][2].toString()));
                         newDue.textContent = dayDifference(i)+": "+dayStates[tempKey].slice(3,-2);
                     } else {priorityList.push(15)}
@@ -467,7 +469,7 @@ function dueWorkList() {
                 }
                 dueContainer.appendChild(newDue);
             }}}
-    c(priorityList)
+    c("priority list: "+priorityList)
     for (let j=0;j<daysList.length;j++) {totalStudyTime = totalStudyTime + Math.max(0, priorityList[j]-daysList[j]);}
     totalStudyTime = Math.pow(totalStudyTime, 3/4) * 15;
     (time.getDay() == 6 || time.getDay() == 0) && (totalStudyTime *= 1.5);
