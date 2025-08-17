@@ -1,3 +1,9 @@
+let mode = 2 // 1=Normal 2=AutoLogin 3=Test
+switch (mode) {
+    case 1: sss(1,0); break;
+    case 2: sss(1,0); sss(2,1); sss(3,"Admin"); break;
+    case 3: sss(1,1); sss(2,1); sss(3,"Admin"); break;
+}
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -18,8 +24,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+
 let dayStates = {}; // Store event text per day
-let TDList = [];
 let hasUnsavedChanges = false;
 let selectedColor = 1;
 let totalStudyTime = 0;
@@ -79,6 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (gss(3)!=0) {getel("LoggedIn").innerText = "Logged in!"}
     if (gss(1)==1) {getel("LoggedIn").innerText = "In Test Mode"}
+    if (gss(2)==1 && gss(1)!=1) {
+        StartLoad();
+    }
 
     loadTDL();
     Loop();
@@ -181,6 +190,7 @@ function newLoadDays() {
     })
 }
 
+let TDList = []
 ///SAVE///
 window.storeDays = storeDays;
 function storeDays() {
@@ -598,95 +608,3 @@ function loadTDL() {
         getel("TDL").appendChild(TDLabel);
     }
 }
-/*
-// Open (or create) a database named "GameDB" with version 1
-const request = indexedDB.open("GameDB", 1);
-
-// Global variables
-let db2;
-let addData, getData, updateData, deleteData;
-let TDLReturn;
-
-// This runs only the first time or when you upgrade the DB version
-request.onupgradeneeded = function (event) {
-    const db = event.target.result;
-
-    // Create a store called "players", using 'id' as the unique key
-    const store = db.createObjectStore("players", { keyPath: "id" });
-};
-
-// When DB successfully opens
-request.onsuccess = function (event) {
-    db2 = event.target.result;
-
-    addData = function (player) {
-        const tx = db2.transaction("players", "readwrite");
-        const store = tx.objectStore("players");
-        store.add(player);
-    };
-
-    getData = function (id) {
-        return new Promise((resolve, reject) => {
-        const tx = db2.transaction("players", "readonly");
-        const store = tx.objectStore("players");
-        const request = store.get(id);
-
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-        });
-    };
-
-    updateData = function (id) {
-        const tx = db2.transaction("players", "readwrite");
-        const store = tx.objectStore("players");
-        store.put(id);
-    };
-
-    deleteData = function (id) {
-        const tx = db2.transaction("players", "readwrite");
-        const store = tx.objectStore("players");
-        store.delete(id);
-    };
-}
-
-request.onerror = function () {
-    console.error("Failed to open IndexedDB");
-};
-
-async function getTDLData(id2) {
-    TDLReturn = await getData(id2);
-}
-
-setTimeout(() => {
-    //deleteData(1); // Delete player with ID 1 if exists
-    if(1) {
-        c("Adding default player data...");
-        addData({ id: 1, TDL: JSON.parse(localStorage.getItem("TDL")) || []});
-    }
-}, 400);
-
-setTimeout(() => {
-    getTDLData(1).then(() => {
-        TDLReturn = TDLReturn.TDL || [];
-        c("TDL data loaded: ", TDLReturn);
-        loadTDL();
-    })
-}, 800);
-
-
-// ✅ EXAMPLE USAGE:
-addData({ id: 1, name: "Riley", score: 100 });
-getData(1);
-updateData({ id: 1, name: "Riley", score: 200 });
-deleteData(1);
-
-(async () => {
-        let player = await getData(1);
-        console.log("Player: ", player);
-        console.log("TDL: ", player.TDL);
-    })();
-*/
-
-
-
-
