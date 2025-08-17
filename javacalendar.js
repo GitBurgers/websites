@@ -19,12 +19,10 @@ const firebaseConfig = {
     appId: "1:705086479682:web:5511ad5b3e00921947bcdb",
     measurementId: "G-CGMRRC6B0B"
 };
-
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
-
+/////////
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
 let selectedColor = 1;
@@ -116,7 +114,7 @@ function Loop() {
     } else {STelement.style.color = "#ffffff"}
     if (getel("LogInput").value!=""){getel("LogIn").setAttribute("Ready","1")}
     else {getel("LogIn").setAttribute("Ready","0")}
-    setTimeout(Loop, 500)
+    setTimeout(Loop, 400)
 }
 
 ////KEY PRESSED////
@@ -181,7 +179,15 @@ function newLoadDays() {
     get(child(dbRef, `${gss(3)}/TDL`)).then((snapshot) => {
         if (snapshot.exists()) {
             TDList = snapshot.val();
-            if (TDList == null) {TDList = []}
+            if (TDList == null) {TDList = []} else {
+                if (typeof TDList == "object") {
+                    let temptdlist = TDList;
+                    TDList = [];
+                    for (let i in temptdlist) {
+                        TDList.push(temptdlist[i]);
+                    }
+                }
+            }
             loadTDL();
         } else {
             console.error("No TDL data available");
@@ -196,12 +202,10 @@ window.storeDays = storeDays;
 function storeDays() {
     let TDLInputs = getel("TDL").querySelectorAll("label input[type='checkbox']");
     document.getElementById
+    c(TDList)
     TDLInputs.forEach(item => {
-        c(item.checked);
         if(item.checked) {
             TDList.splice(TDList.indexOf(item.value), 1);
-            updateData({ id: 1, TDL: TDList })
-            //item.parentElement.remove();
             loadTDL();
         }
     })
@@ -338,10 +342,10 @@ function buildCalendar() {
         }
         box.addEventListener("click", () => {
             if (!pressingControl) {
-            const input = getel("eventInput");
-            let text = input.value.trim();
-            if (input.value != "") {
-                switch(selectedColor) {
+                const input = getel("eventInput");
+                let text = input.value.trim();
+                if (input.value != "") {
+                    switch(selectedColor) {
                     case 2: {text = (text+"")+"/o";break;}
                     case 3: {text = (text+"")+"/r";break;}
                     case 4: {text = (text+"")+"/g";break;}
