@@ -7,7 +7,8 @@
     <link rel="icon" href="Logo.png" type="image/png">
     <script src="javamain.js"></script>
 
-    <script type="module" src="javacalendar.js"></script>
+    <!--script type="module" src="javacalendar.js"--></script>
+    <script src="javacalendar.js"></script>
 </head>
 <body>
     <div id="topDiv">
@@ -15,9 +16,9 @@
         <p id="quickText">Today: No events</p>
         <button id="LoggedIn" onclick="NotLoggedIn()">Not Logged In</button>
     </div>
+
     <input type="text" id="eventInput"/>
     <button class="eventClear" onclick="clearInput()">✖️ Clear</button>
-    
     <button class="colorChange" id="color-green">g</button>
     <button class="colorChange" id="color-or">o</button>
     <button class="colorChange" id="color-red">b</button>
@@ -61,4 +62,3 @@
     </div>
 </body>
 </html>
-
