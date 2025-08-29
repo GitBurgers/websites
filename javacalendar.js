@@ -1,10 +1,10 @@
-let mode = 2 // 1=Normal 2=AutoLogin 3=Test
+let mode = 3 // 1=Normal 2=AutoLogin 3=Test
 switch (mode) {
     case 1: sss(1,0); break;
     case 2: sss(1,0); sss(2,1); sss(3,"Admin"); break;
     case 3: sss(1,1); sss(2,1); sss(3,"Admin"); break;
 }
-
+/*
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -22,8 +22,7 @@ const firebaseConfig = {
 // 🔗 Initialize Firebase and get database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-/////////
-
+*/
 
 let dayStates = {}; // Store event text per day
 let hasUnsavedChanges = false;
@@ -128,7 +127,9 @@ document.addEventListener('keydown', function(event) {
     if (event.key == "Control" && hasLoaded && document.activeElement !== calInput) {storeDays()}
     if (event.key == "`") {pressingBacktick = 1}
     if (event.key == "1" && pressingBacktick) {sss(2, 1);getel("LoggedIn").innerText = "Welcome back Riley";sss(3,"Admin")}
-    //c(event.key)
+    if (event.key == "Enter") if(adding_TDL==1) {TLD_add();} else {storeDays();}
+    if (event.key == "t" && document.activeElement !== calInput && adding_TDL==0) {window.scrollTo({ top: 1000, behavior: 'smooth' });setTimeout(TLD_add_start, 20)}
+    c(event.key)
 }); document.addEventListener('keyup', function(event) {
     if (event.key == "`") {pressingBacktick = 0}
 });
@@ -511,6 +512,7 @@ window.Studying = Studying;
 function Studying() {
     if (hasLoaded) {
         if (TimerText.getAttribute("clicked") == "0") {
+            getel("TimeB").innerText = "■"
             let findInput = getel("eventInput").value;
             let findInputType = typeof Number(findInput);
             if (findInput != "" && findInputType == "number") {dayStates["studyTime"] = findInput;clearInput()} else {
@@ -521,6 +523,7 @@ function Studying() {
                 TimerText.innerText = (TimerText.getAttribute("minutes").toString().padStart(2, '0') + ":" + TimerText.getAttribute("seconds").toString().padStart(2, '0'))
             }
         } else {
+            getel("TimeB").innerText = "▶"
             TimerText.setAttribute("clicked", "0");
             TimerText.innerText = "";
         }
@@ -598,6 +601,7 @@ function TLD_add() {
     TDList.splice(getel("TDLInput2").value, 0, getel("TDLInput").value);
     //localStorage.setItem("TDL", JSON.stringify(TDList));
     loadTDL();
+    storeDays();
 }
 
 function loadTDL() {
